@@ -24,7 +24,7 @@ require "optparse"
 require "ostruct"
 require "taglib"
 
-$version = "0.1.1"
+$version = "0.1.2"
 $dirs = []
 
 # The main Spfy class
