@@ -47,7 +47,6 @@ Command-line arguments are available to output to a file on disk or suppress unw
     -t, --no-title                   Suppress track title in output
     -a, --no-artist                  Suppress artist name in output
     -l, --no-album                   Suppress album name in output
-    -n, --no-tracknum                Suppress track number in output
 
 For additional options use `spfy --help`.
 
