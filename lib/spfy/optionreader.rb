@@ -1,4 +1,4 @@
-class Spfy::OptionReader
+class OptionReader
 
 	def self.parse(args)
 	

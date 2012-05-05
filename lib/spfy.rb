@@ -27,10 +27,9 @@ require "taglib"
 $version = "0.1"
 $dirs = []
 
+class Spfy
 
-
-
-
+	def self.generate
 		#
 		# Read command-line arguments
 		#
@@ -154,6 +153,6 @@ $dirs = []
 			abort("Exiting.. (#{e})")
 		end
 
-
-
+	end
+end
 

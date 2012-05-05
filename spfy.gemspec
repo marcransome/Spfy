@@ -28,5 +28,6 @@ Gem::Specification.new do |s|
 	s.authors		= ["Marc Ransome"]
 	s.email			= 'marc.ransome@fidgetbox.co.uk'
 	s.files			= `git ls-files`.split("\n")
+	s.executables		<< 'spfy' 
 	s.homepage		= 'http://rubygems.org/gems/spfy'
 end
