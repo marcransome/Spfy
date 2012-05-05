@@ -69,14 +69,6 @@ class Spfy
 		#
 		begin
 			if options.output.any?
-				
-				# test whether there is an option for data to output
-				if options.hide_title and options.hide_artist and options.hide_album
-					
-					# all data has been suppressed, report to user
-					puts "All tags suppressed, no XML file created."
-					exit
-				end
 			
 				xmlFile = File.open(options.output[0], "w")
 				
