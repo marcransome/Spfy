@@ -1,4 +1,24 @@
 #!/usr/bin/env ruby
+#
+#  spfy.rb
+#  Spfy ("spiffy")
+#
+#  Copyright (c) 2012, Marc Ransome <marc.ransome@fidgetbox.co.uk>
+#
+#  This file is part of Spfy.
+#
+#  Spfy is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  Spfy is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with Spfy.  If not, see <http:#www.gnu.org/licenses/>.
 
 require "optparse"
 require "ostruct"
@@ -131,7 +151,7 @@ begin
 		print "Generating XML.."
 		
 		xmlFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-		xmlFile.write("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n")
+		xmlFile.write("<playlist version=\"1\" xmlns=\"http:#xspf.org/ns/0/\">\n")
 		xmlFile.write("\t<trackList>\n")
 		
 		Dir.foreach($dirs[0]).sort.each do |file|
@@ -144,7 +164,7 @@ begin
 					tag = fileref.tag
 					
 					xmlFile.write("\t\t<track>\n")
-					#xmlFile.write("\t\t\t<location>http://#{host}#{musicDir}/#{file}</location>\n")
+					#xmlFile.write("\t\t\t<location>http:##{host}#{musicDir}/#{file}</location>\n")
 					xmlFile.write("\t\t\t<title>#{tag.title}</title>\n")
 					xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n")
 					xmlFile.write("\t\t\t<album>#{tag.album}</album>\n")
@@ -164,7 +184,7 @@ begin
 		print " success\n"
 	else		
 		puts "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-		puts "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"
+		puts "<playlist version=\"1\" xmlns=\"http:#xspf.org/ns/0/\">\n"
 		puts "\t<trackList>\n"
 		
 		Dir.foreach($dirs[0]).sort.each do |file|
@@ -177,7 +197,7 @@ begin
 					tag = fileref.tag
 
 					puts "\t\t<track>\n"
-					#xmlFile.write("\t\t\t<location>http://#{host}#{musicDir}/#{file}</location>\n")
+					#xmlFile.write("\t\t\t<location>http:##{host}#{musicDir}/#{file}</location>\n")
 					puts "\t\t\t<title>#{tag.title}</title>\n"
 					puts "\t\t\t<creator>#{tag.artist}</creator>\n"
 					puts "\t\t\t<album>#{tag.album}</album>\n"
