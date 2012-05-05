@@ -4,7 +4,7 @@
 **Spfy** is a command-line ruby tool for generating XSPF playlists from metadata stored in several popular audio formats.
 
 ##Installation
-[TagLib](http://developer.kde.org/~wheeler/taglib.html) is required for spfy to work.  Follow the steps below (take from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
+[TagLib](http://developer.kde.org/~wheeler/taglib.html) is required for spfy to work.  Follow the steps below (taken from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
 
 > |               |                                    |
 > |---------------|------------------------------------|
