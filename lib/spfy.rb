@@ -29,10 +29,12 @@ $dirs = []
 
 class Spfy
 
+	##
+	# Starts the XSPF generator.
+	#
 	def self.generate
-		#
-		# Read command-line arguments
-		#
+
+		# start processing command line arguments
 		begin
 		
 			# short usage banner
@@ -64,77 +66,89 @@ class Spfy
 			exit
 		end
 		
-		#
-		# Process valid paths
-		#
+		# start processing source paths
 		begin
 			if options.output.any?
 			
 				xmlFile = File.open(options.output[0], "w")
 				
 				print "Generating XML.."
-				
+	
+				# write XSPF header
 				xmlFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
 				xmlFile.write("<playlist version=\"1\" xmlns=\"http:#xspf.org/ns/0/\">\n")
 				xmlFile.write("\t<trackList>\n")
 				
-				Dir.foreach($dirs[0]).sort.each do |file|
-					next if file == '.' or file == '..' or
-					next if file.start_with? '.'
+				# repeat for each source path specified
+				$dirs.each do |path|
 					
-					begin
-						TagLib::FileRef.open($dirs[0] + "/" + file) do |fileref|
-		
-							tag = fileref.tag
-							
-							# skip files with no tags
-							next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
-							
-							xmlFile.write("\t\t<track>\n")
-							#xmlFile.write("\t\t\t<location>http:##{host}#{musicDir}/#{file}</location>\n")
-							xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.empty?
-							xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.empty?
-							xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.empty?
-							xmlFile.write("\t\t</track>\n")
-							
+					# repeat for each file
+					Dir.foreach(path).sort.each do |file|
+						next if file == '.' or file == '..' or
+						next if file.start_with? '.'
+						
+						begin
+							TagLib::FileRef.open(path + "/" + file) do |fileref|
+								
+								tag = fileref.tag
+								
+								# skip files with no tags
+								next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
+								
+								# write track metadata
+								xmlFile.write("\t\t<track>\n")
+								xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.empty?
+								xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.empty?
+								xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.empty?
+								xmlFile.write("\t\t</track>\n")
+							end
+						rescue Exception => e
+							next
 						end
-					rescue Exception => e
-						next
 					end
 				end
 				
+				# write XSPF footer
 				xmlFile.write("\t</trackList>\n")
 				xmlFile.write("</playlist>\n")
+				
 				xmlFile.close
 				
 				print " success\n"
+				
 			else		
 				puts "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				puts "<playlist version=\"1\" xmlns=\"http:#xspf.org/ns/0/\">\n"
 				puts "\t<trackList>\n"
 				
-				Dir.foreach($dirs[0]).sort.each do |file|
-					next if file == '.' or file == '..' or
-					next if file.start_with? '.'
-					
-					begin
-						TagLib::FileRef.open($dirs[0] + "/" + file) do |fileref|
+				
+				# repeat for each source path
+				$dirs.each do |path|
+				
+					# repeat for each file
+					Dir.foreach(path).sort.each do |file|
+						next if file == '.' or file == '..' or
+						next if file.start_with? '.'
 						
-							tag = fileref.tag
-		
-							# skip files with no tags
-							next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
-		
-							puts "\t\t<track>\n"
-							#xmlFile.write("\t\t\t<location>http:##{host}#{musicDir}/#{file}</location>\n")
-							puts "\t\t\t<title>#{tag.title}</title>\n"
-							puts "\t\t\t<creator>#{tag.artist}</creator>\n"
-							puts "\t\t\t<album>#{tag.album}</album>\n"
-							puts "\t\t</track>\n"
+						begin
+							TagLib::FileRef.open(path + "/" + file) do |fileref|
 							
+								tag = fileref.tag
+			
+								# skip files with no tags
+								next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
+			
+								# write track metadata
+								puts "\t\t<track>\n"
+								puts "\t\t\t<title>#{tag.title}</title>\n"
+								puts "\t\t\t<creator>#{tag.artist}</creator>\n"
+								puts "\t\t\t<album>#{tag.album}</album>\n"
+								puts "\t\t</track>\n"
+								
+							end
+						rescue Exception => e
+							next
 						end
-					rescue Exception => e
-						next
 					end
 				end
 				
