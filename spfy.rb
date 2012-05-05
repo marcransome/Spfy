@@ -34,10 +34,10 @@ class OptionReader
 		options = OpenStruct.new
 		options.output = []
 		options.verbose = false
-		options.title = false
-		options.artist = false
-		options.album = false
-		options.tracknum = false
+		options.hide_title = false
+		options.hide_artist = false
+		options.hide_album = false
+		options.hide_tracknum = false
 	
 		opts = OptionParser.new do |opts|
 			opts.banner = "Usage: " + File.basename(__FILE__) + " [options] [source]"
@@ -49,20 +49,20 @@ class OptionReader
 				options.output << out
 			end
 			
-			opts.on("-t", "--title", "Include track title in output") do
-				options.title = true
+			opts.on("-t", "--no-title", "Suppress track title in output") do
+				options.hide_title = true
 			end
 			
-			opts.on("-a", "--artist", "Include artist name in output") do
-				options.artist = true
+			opts.on("-a", "--no-artist", "Suppress artist name in output") do
+				options.hide_artist = true
 			end
 			
-			opts.on("-l", "--album", "Include album name in output") do
-				options.album = true
+			opts.on("-l", "--no-album", "Suppress album name in output") do
+				options.hide_album = true
 			end
 			
-			opts.on("-n", "--tracknum", "Include track number in output") do
-				options.tracknum = true
+			opts.on("-n", "--no-tracknum", "Suppress track number in output") do
+				options.hide_tracknum = true
 			end
 			
 			opts.separator ""
@@ -146,6 +146,15 @@ end
 #
 begin
 	if options.output.any?
+		
+		# test whether there is an option for data to output
+		if options.hide_title and options.hide_artist and options.hide_album
+			
+			# all data has been suppressed, report to user
+			puts "All tags suppressed, no XML file created."
+			exit
+		end
+	
 		xmlFile = File.open(options.output[0], "w")
 		
 		print "Generating XML.."
@@ -160,19 +169,18 @@ begin
 			
 			begin
 				TagLib::FileRef.open($dirs[0] + "/" + file) do |fileref|
-				
+
 					tag = fileref.tag
 					
 					xmlFile.write("\t\t<track>\n")
 					#xmlFile.write("\t\t\t<location>http:##{host}#{musicDir}/#{file}</location>\n")
-					xmlFile.write("\t\t\t<title>#{tag.title}</title>\n")
-					xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n")
-					xmlFile.write("\t\t\t<album>#{tag.album}</album>\n")
+					xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.empty?
+					xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.empty?
+					xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.empty?
 					xmlFile.write("\t\t</track>\n")
 					
 				end
 			rescue Exception => e
-				puts "ignored: " + $dirs[0] + "/" + file
 				next
 			end
 		end
@@ -215,8 +223,8 @@ begin
 	end
 	
 rescue SystemExit, Interrupt
-	abort("\nCancelled, exiting..")
+	abort("Cancelled, exiting..")
 rescue Exception => e	
-	abort("\nExiting.. (#{e})")
+	abort("Exiting.. (#{e})")
 end
 
