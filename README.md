@@ -6,7 +6,7 @@
 ##Installation
 [TagLib](http://developer.kde.org/~wheeler/taglib.html) is required for spfy to work.  Follow the steps below (taken from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
 
-> |               |                                    |
+> | System:       |  Command:                          |
 > |---------------|------------------------------------|
 > | Debian/Ubuntu | `sudo apt-get install libtag1-dev` |
 > | Fedora/RHEL   | `sudo yum install taglib-devel`    |
