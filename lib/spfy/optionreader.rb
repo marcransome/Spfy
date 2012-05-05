@@ -11,7 +11,7 @@ class OptionReader
 		options.hide_tracknum = false
 	
 		opts = OptionParser.new do |opts|
-			opts.banner = "Usage: " + File.basename(__FILE__) + " [options] [source]"
+			opts.banner = "Usage: #{File.basename($0)} [options] [source]"
 			
 			opts.separator ""
 			opts.separator "Output:"
@@ -43,7 +43,7 @@ class OptionReader
 				puts "Spiffier #{$version} Copyright (c) 2012 Marc Ransome <marc.ransome@fidgetbox.co.uk>"
 				puts "This program comes with ABSOLUTELY NO WARRANTY, use it at your own risk."
 				puts "This is free software, and you are welcome to redistribute it under"
-				puts "certain conditions; type `" + File.basename(__FILE__, ".*") + " --license' for details."
+				puts "certain conditions; type `#{File.basename($0)} --license' for details."
 				exit
 			end
 			

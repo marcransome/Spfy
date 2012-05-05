@@ -37,7 +37,7 @@ class Spfy
 		
 			# test for zero arguments
 			if ARGV.empty? then
-				puts "Try " + File.basename(__FILE__) + " --help for available options."
+				puts "Try #{File.basename($0)} --help for available options."
 				exit
 			end
 			
@@ -47,17 +47,17 @@ class Spfy
 			# test for zero source paths
 			if $dirs.empty?
 				puts "No source path specified."
-				puts "Try " + File.basename(__FILE__) + " --help for available options."
+				puts "Try #{File.basename($0)} --help for available options."
 				exit
 			end
 			
 		rescue OptionParser::InvalidOption => t
 			puts t
-			puts "Try " + File.basename(__FILE__) + " --help for available options."
+			puts "Try #{File.basename($0)} --help for available options."
 			exit
 		rescue OptionParser::MissingArgument => m
 			puts m
-			puts "Try " + File.basename(__FILE__) + " --help for available options."
+			puts "Try #{File.basename($0)} --help for available options."
 			exit
 		end
 		
