@@ -50,9 +50,6 @@ Command-line arguments are available to output to a file on disk or suppress unw
 
 For additional options use `spfy --help`.
 
-##API Reference
-An API is forthcoming in a future release.
-
 ##License
 Spfy is licensed under the [GNU General Public License v3.0](http://www.gnu.org/licenses/gpl.html).
 
