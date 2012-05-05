@@ -17,42 +17,36 @@ class OptionReader
 		options.album = false
 		options.tracknum = false
 	
-		optparser = OptionParser.new do |optparser|
-			optparser.banner = "Usage: " + File.basename(__FILE__) + " [options] [music dir]"
+		opts = OptionParser.new do |opts|
+			opts.banner = "Usage: " + File.basename(__FILE__) + " [options] [source]"
 			
-			optparser.separator ""
-			optparser.separator "Output:"
+			opts.separator ""
+			opts.separator "Output:"
 			
-			optparser.on("-o", "--output FILE", "File to output XSPF data to") do |out|		
-			
-				#VALIDATE FILE HERE
+			opts.on("-o", "--output FILE", "File to output XSPF data to") do |out|
 				options.output << out
 			end
 			
-			optparser.on("-t", "--title", "Include track title in output") do
+			opts.on("-t", "--title", "Include track title in output") do
 				options.title = true
-				puts "title:" + options.title.to_s
 			end
 			
-			optparser.on("-a", "--artist", "Include artist name in output") do
+			opts.on("-a", "--artist", "Include artist name in output") do
 				options.artist = true
-				puts "artist:" + options.artist.to_s
 			end
 			
-			optparser.on("-l", "--album", "Include album name in output") do
+			opts.on("-l", "--album", "Include album name in output") do
 				options.album = true
-				puts "album:" + options.album.to_s
 			end
 			
-			optparser.on("-n", "--tracknum", "Include track number in output") do
+			opts.on("-n", "--tracknum", "Include track number in output") do
 				options.tracknum = true
-				puts "tracknum:" + options.tracknum.to_s
 			end
 			
-			optparser.separator ""
-			optparser.separator "Common options:"
+			opts.separator ""
+			opts.separator "Common options:"
 			
-			optparser.on("-v", "--version", "Display version information") do
+			opts.on("-v", "--version", "Display version information") do
 				puts "Spiffier #{$version} Copyright (c) 2012 Marc Ransome <marc.ransome@fidgetbox.co.uk>"
 				puts "This program comes with ABSOLUTELY NO WARRANTY, use it at your own risk."
 				puts "This is free software, and you are welcome to redistribute it under"
