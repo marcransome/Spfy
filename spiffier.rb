@@ -84,4 +84,22 @@ class XspfGenerator
 
 end # class XspfGenerator
 
-options = OptionReader.parse(ARGV)
+begin
+	# test for zero arguments
+	if ARGV.empty? then
+		puts "Try " + File.basename(__FILE__) + " --help for available options."
+		exit
+	end
+	
+	# parse command-line arguments
+	options = OptionReader.parse(ARGV)
+	
+rescue OptionParser::InvalidOption => t
+	puts t
+	puts "Try " + File.basename(__FILE__) + " --help for available options."
+	exit
+rescue OptionParser::MissingArgument => m
+	puts m
+	puts "Try " + File.basename(__FILE__) + " --help for available options."
+	exit
+end
