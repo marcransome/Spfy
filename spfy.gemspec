@@ -29,5 +29,6 @@ Gem::Specification.new do |s|
 	s.email			= 'marc.ransome@fidgetbox.co.uk'
 	s.files			= `git ls-files`.split("\n")
 	s.executables		<< 'spfy' 
+	s.add_runtime_dependency 'taglib-ruby', '>= 0.5.0'
 	s.homepage		= 'http://rubygems.org/gems/spfy'
 end
