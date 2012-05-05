@@ -23,28 +23,28 @@ class OptionReader
 			optparser.separator ""
 			optparser.separator "Output:"
 			
-			optparser.on("-o", "--output FILE", "test") do |out|		
+			optparser.on("-o", "--output FILE", "File to output XSPF data to") do |out|		
 			
 				#VALIDATE FILE HERE
 				options.output << out
 			end
 			
-			optparser.on("-t", "--title", "Include title where availale") do
+			optparser.on("-t", "--title", "Include track title in output") do
 				options.title = true
 				puts "title:" + options.title.to_s
 			end
 			
-			optparser.on("-a", "--artist", "Include artist name where availale") do
+			optparser.on("-a", "--artist", "Include artist name in output") do
 				options.artist = true
 				puts "artist:" + options.artist.to_s
 			end
 			
-			optparser.on("-l", "--album", "Include album name where availale") do
+			optparser.on("-l", "--album", "Include album name in output") do
 				options.album = true
 				puts "album:" + options.album.to_s
 			end
 			
-			optparser.on("-n", "--tracknum", "Include track number where availale") do
+			optparser.on("-n", "--tracknum", "Include track number in output") do
 				options.tracknum = true
 				puts "tracknum:" + options.tracknum.to_s
 			end
