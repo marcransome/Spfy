@@ -94,7 +94,7 @@ class Spfy
 								tag = fileref.tag
 								
 								# skip files with no tags
-								next if tag.title.empty? and tag.artist.empty? and tag.album.empty? and tag.track.empty?
+								next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
 								
 								# write track metadata
 								xmlFile.write("\t\t<track>\n")
@@ -136,7 +136,7 @@ class Spfy
 								tag = fileref.tag
 			
 								# skip files with no tags
-								next if tag.title.empty? and tag.artist.empty? and tag.album.empty? and tag.track.empty?
+								next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
 			
 								# write track metadata
 								puts "\t\t<track>\n"
