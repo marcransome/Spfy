@@ -3,6 +3,8 @@
 require 'optparse'
 require 'ostruct'
 
+$version = "0.1"
+
 class OptionReader
 
 	def self.parse(args)
@@ -51,8 +53,11 @@ class OptionReader
 			optparser.separator ""
 			optparser.separator "Common options:"
 			
-			optparser.on("-v", "--verbose", "Verbose program output") do
-				puts tst
+			optparser.on("-v", "--version", "Display version information") do
+				puts "Spiffier #{$version} Copyright (c) 2012 Marc Ransome <marc.ransome@fidgetbox.co.uk>"
+				puts "This program comes with ABSOLUTELY NO WARRANTY, use it at your own risk."
+				puts "This is free software, and you are welcome to redistribute it under"
+				puts "certain conditions; type `" + File.basename(__FILE__, ".*") + " --license' for details."
 				exit
 			end
 			
