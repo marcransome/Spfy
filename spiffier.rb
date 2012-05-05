@@ -18,15 +18,14 @@ class OptionReader
 		options.tracknum = false
 	
 		optparser = OptionParser.new do |optparser|
-			optparser.banner = "Usage: test.rb [options] [music dir]"
+			optparser.banner = "Usage: " + File.basename(__FILE__) + " [options] [music dir]"
 			
 			optparser.separator ""
 			optparser.separator "Output:"
 			
 			optparser.on("-o", "--output FILE", "test") do |out|		
 			
-			#VALIDATE FILE HERE
-			
+				#VALIDATE FILE HERE
 				options.output << out
 			end
 			
