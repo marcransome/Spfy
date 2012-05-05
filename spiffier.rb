@@ -69,11 +69,6 @@ class OptionReader
 		# parse then remove the remaining arguments
 		optparser.parse!(args)
 		
-		# test for empty output
-		if options.output.empty? then
-			puts "No output file was specified."
-		end
-		
 		# return the options array
 		options
 		
