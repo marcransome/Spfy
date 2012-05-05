@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
 
-require 'optparse'
-require 'ostruct'
+require "optparse"
+require "ostruct"
+require "taglib"
 
 $version = "0.1"
+$dirs = []
 
 class OptionReader
 
@@ -63,6 +65,16 @@ class OptionReader
 		# parse then remove the remaining arguments
 		opts.parse!(args)
 		
+		# test leftover input for valid paths
+		args.each do |dir|
+		
+			# add path to global dirs variable
+			if File.directory?(dir)
+				$dirs << dir
+			end
+			
+		end
+
 		# return the options array
 		options
 		
@@ -78,7 +90,11 @@ class XspfGenerator
 
 end # class XspfGenerator
 
+#
+# Read command-line arguments
+#
 begin
+
 	# test for zero arguments
 	if ARGV.empty? then
 		puts "Try " + File.basename(__FILE__) + " --help for available options."
@@ -87,6 +103,13 @@ begin
 	
 	# parse command-line arguments
 	options = OptionReader.parse(ARGV)
+	
+	# test for zero source paths
+	if $dirs.empty?
+		puts "No source path specified."
+		puts "Try " + File.basename(__FILE__) + " --help for available options."
+		exit
+	end
 	
 rescue OptionParser::InvalidOption => t
 	puts t
@@ -97,3 +120,83 @@ rescue OptionParser::MissingArgument => m
 	puts "Try " + File.basename(__FILE__) + " --help for available options."
 	exit
 end
+
+#
+# Process valid paths
+#
+begin
+	if options.output.any?
+		xmlFile = File.open(options.output[0], "w")
+		
+		print "Generating XML.."
+		
+		xmlFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+		xmlFile.write("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n")
+		xmlFile.write("\t<trackList>\n")
+		
+		Dir.foreach($dirs[0]).sort.each do |file|
+			next if file == '.' or file == '..' or
+			next if file.start_with? '.'
+			
+			begin
+				TagLib::FileRef.open($dirs[0] + "/" + file) do |fileref|
+				
+					tag = fileref.tag
+					
+					xmlFile.write("\t\t<track>\n")
+					#xmlFile.write("\t\t\t<location>http://#{host}#{musicDir}/#{file}</location>\n")
+					xmlFile.write("\t\t\t<title>#{tag.title}</title>\n")
+					xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n")
+					xmlFile.write("\t\t\t<album>#{tag.album}</album>\n")
+					xmlFile.write("\t\t</track>\n")
+					
+				end
+			rescue Exception => e
+				puts "ignored: " + $dirs[0] + "/" + file
+				next
+			end
+		end
+		
+		xmlFile.write("\t</trackList>\n")
+		xmlFile.write("</playlist>\n")
+		xmlFile.close
+		
+		print " success\n"
+	else		
+		puts "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		puts "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"
+		puts "\t<trackList>\n"
+		
+		Dir.foreach($dirs[0]).sort.each do |file|
+			next if file == '.' or file == '..' or
+			next if file.start_with? '.'
+			
+			begin
+				TagLib::FileRef.open($dirs[0] + "/" + file) do |fileref|
+				
+					tag = fileref.tag
+
+					puts "\t\t<track>\n"
+					#xmlFile.write("\t\t\t<location>http://#{host}#{musicDir}/#{file}</location>\n")
+					puts "\t\t\t<title>#{tag.title}</title>\n"
+					puts "\t\t\t<creator>#{tag.artist}</creator>\n"
+					puts "\t\t\t<album>#{tag.album}</album>\n"
+					puts "\t\t</track>\n"
+					
+				end
+			rescue Exception => e
+				next
+			end
+		end
+		
+		puts "\t</trackList>\n"
+		puts "</playlist>\n"
+		puts "Success."
+	end
+	
+rescue SystemExit, Interrupt
+	abort("\nCancelled, exiting..")
+rescue Exception => e	
+	abort("\nExiting.. (#{e})")
+end
+
