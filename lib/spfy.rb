@@ -76,7 +76,7 @@ class Spfy
 	
 				# write XSPF header
 				xmlFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-				xmlFile.write("<playlist version=\"1\" xmlns=\"http:#xspf.org/ns/0/\">\n")
+				xmlFile.write("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n")
 				xmlFile.write("\t<trackList>\n")
 				
 				# repeat for each source path specified
@@ -118,7 +118,7 @@ class Spfy
 				
 			else		
 				puts "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-				puts "<playlist version=\"1\" xmlns=\"http:#xspf.org/ns/0/\">\n"
+				puts "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"
 				puts "\t<trackList>\n"
 				
 				# repeat for each source path
