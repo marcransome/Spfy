@@ -54,14 +54,14 @@ class OptionReader
 				exit
 			end
 			
-			optparser.on_tail("-h", "--help", "Show this screen") do
-				puts optparser
+			opts.on_tail("-h", "--help", "Show this screen") do
+				puts opts
 				exit
 			end
 		end
 		
 		# parse then remove the remaining arguments
-		optparser.parse!(args)
+		opts.parse!(args)
 		
 		# return the options array
 		options
