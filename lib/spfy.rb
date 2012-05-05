@@ -121,7 +121,6 @@ class Spfy
 				puts "<playlist version=\"1\" xmlns=\"http:#xspf.org/ns/0/\">\n"
 				puts "\t<trackList>\n"
 				
-				
 				# repeat for each source path
 				$dirs.each do |path|
 				
@@ -162,6 +161,7 @@ class Spfy
 			abort("Exiting.. (#{e})")
 		end
 
-	end
-end
+	end # def self.generate
+	
+end # class Spyf
 
