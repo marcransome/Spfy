@@ -35,9 +35,12 @@ class Spfy
 		#
 		begin
 		
+			# short usage banner
+			simple_usage = "Use `#{File.basename($0)} --help` for available options."
+		
 			# test for zero arguments
 			if ARGV.empty? then
-				puts "Try #{File.basename($0)} --help for available options."
+				puts simple_usage
 				exit
 			end
 			
@@ -47,17 +50,17 @@ class Spfy
 			# test for zero source paths
 			if $dirs.empty?
 				puts "No source path specified."
-				puts "Try #{File.basename($0)} --help for available options."
+				puts simple_usage
 				exit
 			end
 			
 		rescue OptionParser::InvalidOption => t
 			puts t
-			puts "Try #{File.basename($0)} --help for available options."
+			puts simple_usage
 			exit
 		rescue OptionParser::MissingArgument => m
 			puts m
-			puts "Try #{File.basename($0)} --help for available options."
+			puts simple_usage
 			exit
 		end
 		
