@@ -22,7 +22,7 @@ With the prerequisites out of the way install spfy by typing:
 ##Using spfy
 By default, spfy will output a formatted [XSPF](http://xspf.org/) playlist to the standard output stream that will include _title_, _artist_, and _album_ tags for each audio file where available.
 
-The general syntax for running spfy is `spfy [options] [source]`, where _source_ is a valid path to a directory containing audio files.
+The general syntax for running spfy is `spfy [options] dir1 ... dirN`, where _dir1 ... dirN_ is one or more directory paths containing audio files.
 
 For example:
 
@@ -41,7 +41,7 @@ For example:
 		</trackList>
 	</playlist>
 	
-Spfy also supports multiple directory paths and traverses each directory recursively by default.
+Spfy supports multiple directory paths, for example `spfy /dir1 /dir2` and traverses each directory recursively by default.
 
 Command-line arguments allow you to control which elements are present in spfy's output:
 
