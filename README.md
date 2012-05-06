@@ -41,7 +41,7 @@ For example:
 		</trackList>
 	</playlist>
 	
-Spfy supports multiple directory paths, for example `spfy /dir1 /dir2` and traverses each directory recursively by default.
+Spfy supports multiple directory paths, (e.g. `spfy /dir1 /dir2`) and traverses each directory recursively by default.
 
 Command-line arguments allow you to control which elements are present in spfy's output:
 
