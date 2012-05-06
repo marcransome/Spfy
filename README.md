@@ -13,7 +13,7 @@
 > | Brew          | `brew install taglib`              |
 > | MacPorts      | `sudo port install taglib`         |
 
-With the prerequisites out of the way install spfy using gem:
+With the prerequisites taken care of, istall spfy with the following command:
 
 	gem install spfy
 	
