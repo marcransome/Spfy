@@ -1,7 +1,7 @@
 #Spfy ("spiffy")
 
 ##Overview
-**Spfy** is a command-line ruby tool for generating XSPF playlists from metadata stored in several popular audio formats.
+**Spfy** is a command-line tool for generating XSPF playlists from metadata stored in several popular audio formats, and is developed entirely in [Ruby](http://www.ruby-lang.org/).
 
 ##Installation
 [TagLib](http://developer.kde.org/~wheeler/taglib.html) is required for spfy to work.  Follow the steps below (taken from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
@@ -12,15 +12,13 @@
 > | Fedora/RHEL   | `sudo yum install taglib-devel`    |
 > | Brew          | `brew install taglib`              |
 > | MacPorts      | `sudo port install taglib`         |
-> 
-> Windows users on Ruby 1.9 don't need that, because there is a pre-compiled binary gem available which bundles taglib.
 
-With the prerequisites out of the way install spfy by typing:
+With the prerequisites taken care of spfy can be installed with the following command:
 
 	gem install spfy
 	
 ##Using spfy
-By default, spfy will output a formatted [XSPF](http://xspf.org/) playlist to the standard output stream that will include _location_, _title_, _artist_, and _album_ tags for each audio file where available.
+By default, spfy will output a formatted [XSPF](http://xspf.org/) playlist to the standard output stream that will include _location_, _title_, _artist_, and _album_ elements for each audio file where available.
 
 The general syntax for spfy is `spfy [options] dir1 ... dirN`, where _dir1 ... dirN_ is one or more paths to directories containing audio files.
 
@@ -34,6 +32,7 @@ For example:
 	<playlist version="1" xmlns="http://xspf.org/ns/0/">
 		<trackList>
 			<track>
+				<location>file:///Users/spfy/music/03%20A%20Stitch%20In%20Time.mp3</location>
 				<title>A Stitch In Time</title>
 				<creator>The Smashing Pumpkins</creator>
 				<album>Teargarden by Kaleidyscope</album>
