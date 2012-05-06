@@ -137,7 +137,6 @@ class Spfy
 			
 								# output track metadata
 								puts "\t\t<track>\n"
-								puts "\t\t\t<location>file://#{path}</location>\n"
 								puts "\t\t\t<title>#{tag.title}</title>\n" if !options.hide_title and !tag.title.empty?
 								puts "\t\t\t<creator>#{tag.artist}</creator>\n" if !options.hide_artist and !tag.artist.empty?
 								puts "\t\t\t<album>#{tag.album}</album>\n" if !options.hide_album and !tag.album.empty?
