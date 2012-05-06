@@ -26,7 +26,7 @@ require "taglib"
 require 'find'
 require 'uri'
 
-$version = "0.1.3"
+$version = "0.1.4"
 $dirs = []
 
 # The main Spfy class
