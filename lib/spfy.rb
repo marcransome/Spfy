@@ -23,8 +23,9 @@ require "spfy/optionreader"
 require "optparse"
 require "ostruct"
 require "taglib"
+require 'find'
 
-$version = "0.1.2"
+$version = "0.1.3"
 $dirs = []
 
 # The main Spfy class
@@ -80,16 +81,14 @@ class Spfy
 				xmlFile.write("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n")
 				xmlFile.write("\t<trackList>\n")
 				
-				# repeat for each source path specified
-				$dirs.each do |path|
+				# repeat for each source dir argument
+				$dirs.each do |dir|
+		
+					# repeat for each file recursively
+					Find.find(dir) do |path|
 					
-					# repeat for each file
-					Dir.foreach(path).sort.each do |file|
-						next if file == '.' or file == '..' or
-						next if file.start_with? '.'
-						
 						begin
-							TagLib::FileRef.open(path + "/" + file) do |fileref|
+							TagLib::FileRef.open(path) do |fileref|
 								
 								tag = fileref.tag
 								
@@ -122,29 +121,27 @@ class Spfy
 				puts "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"
 				puts "\t<trackList>\n"
 				
-				# repeat for each source path
-				$dirs.each do |path|
+				# repeat for each source dir argument
+				$dirs.each do |dir|
 				
-					# repeat for each file
-					Dir.foreach(path).sort.each do |file|
-						next if file == '.' or file == '..' or
-						next if file.start_with? '.'
-						
+					# repeat for each file recursively
+					Find.find(dir) do |path|
+					
 						begin
-							TagLib::FileRef.open(path + "/" + file) do |fileref|
+							TagLib::FileRef.open(path) do |fileref|
 							
 								tag = fileref.tag
 			
 								# skip files with no tags
 								next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
 			
-								# write track metadata
+								# output track metadata
 								puts "\t\t<track>\n"
-								puts "\t\t\t<title>#{tag.title}</title>\n"
-								puts "\t\t\t<creator>#{tag.artist}</creator>\n"
-								puts "\t\t\t<album>#{tag.album}</album>\n"
+								puts "\t\t\t<location>file://#{path}</location>\n"
+								puts "\t\t\t<title>#{tag.title}</title>\n" if !options.hide_title and !tag.title.empty?
+								puts "\t\t\t<creator>#{tag.artist}</creator>\n" if !options.hide_artist and !tag.artist.empty?
+								puts "\t\t\t<album>#{tag.album}</album>\n" if !options.hide_album and !tag.album.empty?
 								puts "\t\t</track>\n"
-								
 							end
 						rescue Exception => e
 							next
@@ -152,6 +149,7 @@ class Spfy
 					end
 				end
 				
+				# write XSPF footer
 				puts "\t</trackList>\n"
 				puts "</playlist>\n"
 			end
@@ -163,6 +161,5 @@ class Spfy
 		end
 
 	end # def self.generate
-	
-end # class Spyf
 
+end # class Spyf

@@ -21,7 +21,7 @@
 
 Gem::Specification.new do |s|
 	s.name			= 'spfy'
-	s.version		= '0.1.2'
+	s.version		= '0.1.3'
 	s.date			= '2012-05-06'
 	s.summary		= 'XSPF playlist generator'
 	s.description	= 'Spfy is a simple command-line ruby tool for generating XSPF playlists from metadata stored in several popular audio formats.'
