@@ -24,6 +24,7 @@ require "optparse"
 require "ostruct"
 require "taglib"
 require 'find'
+require 'uri'
 
 $version = "0.1.3"
 $dirs = []
@@ -97,6 +98,12 @@ class Spfy
 								
 								# write track metadata
 								xmlFile.write("\t\t<track>\n")
+								
+								if !options.hide_location
+									encoded_path = URI.escape(path)
+									xmlFile.write("\t\t\t<location>file://#{encoded_path}</location>\n")
+								end
+								
 								xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.empty?
 								xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.empty?
 								xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.empty?
@@ -137,6 +144,12 @@ class Spfy
 			
 								# output track metadata
 								puts "\t\t<track>\n"
+								
+								if !options.hide_location
+									encoded_path = URI.escape(path)
+									puts "\t\t\t<location>file://#{encoded_path}</location>\n"
+								end
+								
 								puts "\t\t\t<title>#{tag.title}</title>\n" if !options.hide_title and !tag.title.empty?
 								puts "\t\t\t<creator>#{tag.artist}</creator>\n" if !options.hide_artist and !tag.artist.empty?
 								puts "\t\t\t<album>#{tag.album}</album>\n" if !options.hide_album and !tag.album.empty?

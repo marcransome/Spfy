@@ -8,6 +8,7 @@ class OptionReader
 		options.hide_title = false
 		options.hide_artist = false
 		options.hide_album = false
+		options.hide_location = false
 	
 		opts = OptionParser.new do |opts|
 			opts.banner = "Usage: #{File.basename($0)} [options] [dir1 ... dirx]"
@@ -17,6 +18,10 @@ class OptionReader
 			
 			opts.on("-o", "--output FILE", "File to output XSPF data to") do |out|
 				options.output << out
+			end
+			
+			opts.on("-f", "--no-location", "Suppress file location output") do
+				options.hide_location = true
 			end
 			
 			opts.on("-t", "--no-title", "Suppress track title in output") do
