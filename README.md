@@ -1,7 +1,7 @@
 #Spfy ("spiffy")
 
 ##Overview
-**Spfy** is a command-line tool for generating XSPF playlists from metadata stored in several popular audio formats, and is developed entirely in [Ruby](http://www.ruby-lang.org/).
+**Spfy** is a command-line tool for generating [XSPF](http://xspf.org/) playlists from metadata stored in several popular audio formats, and is developed entirely in [Ruby](http://www.ruby-lang.org/).  It takes one or more local directory paths as input and traverses the directory structures extracting tags from any audio files that it encounters and outputs a valid XSPF playlist, either to the standard output stream or a file on disk.
 
 ##Installation
 [TagLib](http://developer.kde.org/~wheeler/taglib.html) is required for spfy to work.  Follow the steps below (taken from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
@@ -18,7 +18,7 @@ With the prerequisites taken care of spfy can be installed with the following co
 	gem install spfy
 	
 ##Using spfy
-By default, spfy will output a formatted [XSPF](http://xspf.org/) playlist to the standard output stream that will include _location_, _title_, _artist_, and _album_ elements for each audio file where available.
+By default, spfy will output a formatted XSPF playlist to the standard output stream that will include _location_, _title_, _artist_, and _album_ elements for each audio file where available.
 
 The general syntax for spfy is `spfy [options] dir1 ... dirN`, where _dir1 ... dirN_ is one or more paths to directories containing audio files.
 
