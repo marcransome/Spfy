@@ -12,10 +12,8 @@
 > | Fedora/RHEL   | `sudo yum install taglib-devel`    |
 > | Brew          | `brew install taglib`              |
 > | MacPorts      | `sudo port install taglib`         |
-> 
-> Windows users on Ruby 1.9 don't need that, because there is a pre-compiled binary gem available which bundles taglib.
 
-With the prerequisites out of the way install spfy by typing:
+With the prerequisites out of the way install spfy using gem:
 
 	gem install spfy
 	
