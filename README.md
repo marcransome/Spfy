@@ -20,7 +20,7 @@ With the prerequisites out of the way install spfy by typing:
 	gem install spfy
 	
 ##Using spfy
-By default, spfy will output a formatted [XSPF](http://xspf.org/) playlist to the standard output stream that will include _title_, _artist_, and _album_ tags for each audio file where available.
+By default, spfy will output a formatted [XSPF](http://xspf.org/) playlist to the standard output stream that will include _location_, _title_, _artist_, and _album_ tags for each audio file where available.
 
 The general syntax for running spfy is `spfy [options] dir1 ... dirN`, where _dir1 ... dirN_ is one or more directory paths containing audio files.
 
