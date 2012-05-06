@@ -41,6 +41,8 @@ For example:
 		</trackList>
 	</playlist>
 	
+Spfy also supports multiple directory paths and traverses each directory recursively by default.
+
 Command-line arguments allow you to control which elements are present in spfy's output:
 
     -f, --no-location                Suppress file location output
