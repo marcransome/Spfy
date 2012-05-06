@@ -11,7 +11,7 @@ class OptionReader
 		options.hide_location = false
 	
 		opts = OptionParser.new do |opts|
-			opts.banner = "Usage: #{File.basename($0)} [options] [dir1 ... dirx]"
+			opts.banner = "Usage: #{File.basename($0)} [options] dir1 ... dirN"
 			
 			opts.separator ""
 			opts.separator "Output:"
