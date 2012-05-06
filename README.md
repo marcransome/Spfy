@@ -41,9 +41,10 @@ For example:
 		</trackList>
 	</playlist>
 	
-Command-line arguments are available to output to a file on disk or suppress unwanted tags:
+Command-line arguments allow you to control what elements are present in spfy's output, as well as output directly to a file on disk:
 
     -o, --output FILE                File to output XSPF data to
+    -f, --no-location                Suppress file location output
     -t, --no-title                   Suppress track title in output
     -a, --no-artist                  Suppress artist name in output
     -l, --no-album                   Suppress album name in output
