@@ -73,6 +73,7 @@ class Spfy
 		if options.output.any?
 			# source path(s) provided, output should be to disk
 			
+			# open output file for writing
 			begin
 				xmlFile = File.open(options.output[0], "w")
 			rescue
@@ -93,9 +94,8 @@ class Spfy
 	
 				begin
 					
-				# repeat for each file recursively
-				Find.find(dir) do |path|
-				
+					# repeat for each file recursively
+					Find.find(dir) do |path|
 					
 						TagLib::FileRef.open(path) do |fileref|
 							
@@ -125,14 +125,13 @@ class Spfy
 							
 							xmlFile.write("\t\t</track>\n")
 						end
-
 					end
 				rescue SystemExit, Interrupt
 					abort("\nCancelled, exiting..")
 				rescue Exception => e
 					next
-				end
-			end
+				end # begin
+			end # $dirs.each do |dir|
 			
 			# write XSPF footer
 			xmlFile.write("\t</trackList>\n")
@@ -191,7 +190,6 @@ class Spfy
 				rescue Exception => e
 					next
 				end # begin
-				
 			end # $dirs.each do |dir|
 			
 			# write XSPF footer
