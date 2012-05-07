@@ -6,20 +6,20 @@
 ##Prerequisites
 A working Ruby installation version 1.9 or greater is assumed for Spfy to work, but this is outside the scope of this guide.  For more information refer to the [official installation procedure](http://www.ruby-lang.org/en/downloads/).
 
+[TagLib](http://developer.kde.org/~wheeler/taglib.html) is also required for Spfy to function.  Follow the steps below (taken from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
+
+| System:       |  Command:                          |
+|---------------|------------------------------------|
+| Debian/Ubuntu | `sudo apt-get install libtag1-dev` |
+| Fedora/RHEL   | `sudo yum install taglib-devel`    |
+| Brew          | `brew install taglib`              |
+| MacPorts      | `sudo port install taglib`         |
+
 ##Installation
-[TagLib](http://developer.kde.org/~wheeler/taglib.html) is required for Spfy to function.  Follow the steps below (taken from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
-
-> | System:       |  Command:                          |
-> |---------------|------------------------------------|
-> | Debian/Ubuntu | `sudo apt-get install libtag1-dev` |
-> | Fedora/RHEL   | `sudo yum install taglib-devel`    |
-> | Brew          | `brew install taglib`              |
-> | MacPorts      | `sudo port install taglib`         |
-
-Spfy can then be installed with the following command:
+With the prerequisites above taken care of Spfy can be installed with the following command:
 
 	gem install spfy
-	
+
 ##Using Spfy
 By default, Spfy will output a formatted XSPF playlist to the standard output stream that will include _location_, _title_, _artist_, and _album_ elements for each audio file where available.
 
