@@ -104,9 +104,9 @@ class Spfy
 									xmlFile.write("\t\t\t<location>file://#{encoded_path}</location>\n")
 								end
 								
-								xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.empty?
-								xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.empty?
-								xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.empty?
+								xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.nil?
+								xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.nil?
+								xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.nil?
 								xmlFile.write("\t\t</track>\n")
 							end
 						rescue Exception => e
@@ -150,11 +150,13 @@ class Spfy
 									puts "\t\t\t<location>file://#{encoded_path}</location>\n"
 								end
 								
-								puts "\t\t\t<title>#{tag.title}</title>\n" if !options.hide_title and !tag.title.empty?
-								puts "\t\t\t<creator>#{tag.artist}</creator>\n" if !options.hide_artist and !tag.artist.empty?
-								puts "\t\t\t<album>#{tag.album}</album>\n" if !options.hide_album and !tag.album.empty?
+								puts "\t\t\t<title>#{tag.title}</title>\n" if !options.hide_title and !tag.title.nil?
+								puts "\t\t\t<creator>#{tag.artist}</creator>\n" if !options.hide_artist and !tag.artist.nil?
+								puts "\t\t\t<album>#{tag.album}</album>\n" if !options.hide_album and !tag.album.nil?
 								puts "\t\t</track>\n"
 							end
+						rescue SystemExit, Interrupt
+							# allow user interrupt
 						rescue Exception => e
 							next
 						end
