@@ -70,125 +70,133 @@ class Spfy
 		end
 		
 		# start processing source paths
-		begin
-			if options.output.any?
-				# source path(s) provided, output should be to disk
+		if options.output.any?
+			# source path(s) provided, output should be to disk
 			
+			begin
 				xmlFile = File.open(options.output[0], "w")
-				
-				print "Generating XML.."
-	
-				# write XSPF header
-				xmlFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-				xmlFile.write("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n")
-				xmlFile.write("\t<trackList>\n")
-				
-				# repeat for each source dir argument
-				$dirs.each do |dir|
-		
-					# repeat for each file recursively
-					Find.find(dir) do |path|
-					
-						begin
-							TagLib::FileRef.open(path) do |fileref|
-								
-								tag = fileref.tag
-								
-								# skip files with no tags
-								next if tag.nil?
-								
-								# write track metadata
-								xmlFile.write("\t\t<track>\n")
-								
-								if !options.hide_location
-									# generate a percent encoded string from the local path
-									encoded_path = URI.escape(path)
-									xmlFile.write("\t\t\t<location>file://#{encoded_path}</location>\n")
-								end
-								
-								xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.nil?
-								xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.nil?
-								xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.nil?
-								
-								if !options.hide_tracknum and !tag.track.nil?
-									if tag.track > 0
-										xmlFile.write("\t\t\t<trackNum>#{tag.track}</trackNum>\n")
-									end
-								end
-								
-								xmlFile.write("\t\t</track>\n")
-							end
-						rescue Exception => e
-							next
-						end
-					end
-				end
-				
-				# write XSPF footer
-				xmlFile.write("\t</trackList>\n")
-				xmlFile.write("</playlist>\n")
-				
-				xmlFile.close
-				
-				print " success\n"
-				
-			else
-				# no source path(s) provided, output to stdout
-				
-				# write XSPF header
-				puts "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-				puts "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"
-				puts "\t<trackList>\n"
-				
-				# repeat for each source dir argument
-				$dirs.each do |dir|
-				
-					# repeat for each file recursively
-					Find.find(dir) do |path|
-					
-						begin
-							TagLib::FileRef.open(path) do |fileref|
-							
-								tag = fileref.tag
-			
-								# skip files with no tags
-								next if tag.nil?
-								
-								# output track metadata
-								puts "\t\t<track>\n"
-								
-								if !options.hide_location
-									encoded_path = URI.escape(path)
-									puts "\t\t\t<location>file://#{encoded_path}</location>\n"
-								end
-								
-								puts "\t\t\t<title>#{tag.title}</title>\n" if !options.hide_title and !tag.title.nil?
-								puts "\t\t\t<creator>#{tag.artist}</creator>\n" if !options.hide_artist and !tag.artist.nil?
-								puts "\t\t\t<album>#{tag.album}</album>\n" if !options.hide_album and !tag.album.nil?
-								
-								if !options.hide_tracknum and !tag.track.nil?
-									if tag.track > 0
-										puts "\t\t\t<trackNum>#{tag.track}</trackNum>\n"
-									end
-								end
-
-								puts "\t\t</track>\n"
-							end
-						rescue Exception => e
-							next
-						end
-					end
-				end
-				
-				# write XSPF footer
-				puts "\t</trackList>\n"
-				puts "</playlist>\n"
+			rescue
+				puts "Unable to open output file for writing."
+				puts simple_usage
+				exit
 			end
 			
-		rescue SystemExit, Interrupt
-			abort("Cancelled, exiting..")
-		rescue Exception => e	
-			abort("Exiting.. (#{e})")
+			print "Generating XML.."
+
+			# write XSPF header
+			xmlFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+			xmlFile.write("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n")
+			xmlFile.write("\t<trackList>\n")
+			
+			# repeat for each source dir argument
+			$dirs.each do |dir|
+	
+				begin
+					
+				# repeat for each file recursively
+				Find.find(dir) do |path|
+				
+					
+						TagLib::FileRef.open(path) do |fileref|
+							
+							tag = fileref.tag
+							
+							# skip files with no tags
+							next if tag.nil?
+							
+							# write track metadata
+							xmlFile.write("\t\t<track>\n")
+							
+							if !options.hide_location
+								# generate a percent encoded string from the local path
+								encoded_path = URI.escape(path)
+								xmlFile.write("\t\t\t<location>file://#{encoded_path}</location>\n")
+							end
+							
+							xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.nil?
+							xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.nil?
+							xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.nil?
+							
+							if !options.hide_tracknum and !tag.track.nil?
+								if tag.track > 0
+									xmlFile.write("\t\t\t<trackNum>#{tag.track}</trackNum>\n")
+								end
+							end
+							
+							xmlFile.write("\t\t</track>\n")
+						end
+
+					end
+				rescue SystemExit, Interrupt
+					abort("\nCancelled, exiting..")
+				rescue Exception => e
+					next
+				end
+			end
+			
+			# write XSPF footer
+			xmlFile.write("\t</trackList>\n")
+			xmlFile.write("</playlist>\n")
+			
+			xmlFile.close
+			
+			print " success\n"
+			
+		else
+			# no source path(s) provided, output to stdout
+			
+			# write XSPF header
+			puts "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			puts "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"
+			puts "\t<trackList>\n"
+			
+			# repeat for each source dir argument
+			$dirs.each do |dir|
+
+				begin
+				
+					# repeat for each file recursively
+					Find.find(dir) do |path|
+					
+						TagLib::FileRef.open(path) do |fileref|
+						
+							tag = fileref.tag
+		
+							# skip files with no tags
+							next if tag.nil?
+							
+							# output track metadata
+							puts "\t\t<track>\n"
+							
+							if !options.hide_location
+								encoded_path = URI.escape(path)
+								puts "\t\t\t<location>file://#{encoded_path}</location>\n"
+							end
+							
+							puts "\t\t\t<title>#{tag.title}</title>\n" if !options.hide_title and !tag.title.nil?
+							puts "\t\t\t<creator>#{tag.artist}</creator>\n" if !options.hide_artist and !tag.artist.nil?
+							puts "\t\t\t<album>#{tag.album}</album>\n" if !options.hide_album and !tag.album.nil?
+							
+							if !options.hide_tracknum and !tag.track.nil?
+								if tag.track > 0
+									puts "\t\t\t<trackNum>#{tag.track}</trackNum>\n"
+								end
+							end
+							
+							puts "\t\t</track>\n"
+						end
+					end
+				rescue SystemExit, Interrupt
+					abort("\nCancelled, exiting..")
+				rescue Exception => e
+					next
+				end # begin
+				
+			end # $dirs.each do |dir|
+			
+			# write XSPF footer
+			puts "\t</trackList>\n"
+			puts "</playlist>\n"
 		end
 
 	end # def self.generate
