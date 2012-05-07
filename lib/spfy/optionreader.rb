@@ -34,8 +34,13 @@ class OptionReader
 		opts = OptionParser.new do |opts|
 			opts.banner = "Usage: #{File.basename($0)} [options] dir1 ... dirN"
 			
+			opts.separator ""			
+			
+			opts.separator "#{File.basename($0).capitalize} supports multiple directory paths and traverses each directory recursively."
+			opts.separator "Non-audio files are ignored and will not impact #{File.basename($0)}'s output."
+			
 			opts.separator ""
-			opts.separator "Output:"
+			opts.separator "Output options:"
 			
 			opts.on("-o", "--output FILE", "File to output XSPF data to") do |out|
 				options.output << out
@@ -58,7 +63,7 @@ class OptionReader
 			end
 			
 			opts.separator ""
-			opts.separator "Common options:"
+			opts.separator "Misc options:"
 			
 			opts.on("-v", "--version", "Display version information") do
 				puts "#{File.basename($0).capitalize} #{$version} Copyright (c) 2012 Marc Ransome <marc.ransome@fidgetbox.co.uk>"
