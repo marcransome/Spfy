@@ -31,6 +31,7 @@ class OptionReader
 		options.hide_album = false
 		options.hide_location = false
 		options.hide_tracknum = false
+		options.dirs = []
 	
 		opts = OptionParser.new do |opts|
 			opts.banner = "Usage: #{File.basename($0)} [options] dir1 ... dirN"
@@ -92,7 +93,7 @@ class OptionReader
 		
 			# add path to global dirs variable
 			if File.directory?(dir)
-				$dirs << dir
+				options.dirs << dir
 			end
 			
 		end

@@ -27,7 +27,6 @@ require 'find'
 require 'uri'
 
 $version = "0.1.9"
-$dirs = []
 
 # The main Spfy class
 class Spfy
@@ -52,8 +51,11 @@ class Spfy
 			# parse command-line arguments
 			options = OptionReader.parse(ARGV)
 			
+			# dirs for traversing
+			dirs = options.dirs
+			
 			# test for zero source paths
-			if $dirs.empty?
+			if dirs.empty?
 				puts "No source path specified."
 				puts simple_usage
 				exit
@@ -90,7 +92,7 @@ class Spfy
 			xmlFile.write("\t<trackList>\n")
 			
 			# repeat for each source dir argument
-			$dirs.each do |dir|
+			dirs.each do |dir|
 	
 				begin
 					
@@ -131,7 +133,7 @@ class Spfy
 				rescue Exception => e
 					next
 				end # begin
-			end # $dirs.each do |dir|
+			end # dirs.each do |dir|
 			
 			# write XSPF footer
 			xmlFile.write("\t</trackList>\n")
@@ -150,7 +152,7 @@ class Spfy
 			puts "\t<trackList>\n"
 			
 			# repeat for each source dir argument
-			$dirs.each do |dir|
+			dirs.each do |dir|
 
 				begin
 				
@@ -190,7 +192,7 @@ class Spfy
 				rescue Exception => e
 					next
 				end # begin
-			end # $dirs.each do |dir|
+			end # dirs.each do |dir|
 			
 			# write XSPF footer
 			puts "\t</trackList>\n"
