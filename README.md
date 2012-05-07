@@ -55,8 +55,7 @@ Command-line arguments allow you to control which elements Spfy outputs:
 For additional options use `spfy --help`.
 
 ##License
-This is free software, and you are welcome to redistribute it under
-certain conditions.  Spfy is licensed under the [GNU General Public License v3.0](http://www.gnu.org/licenses/gpl.html).
+This is free software, and you are welcome to redistribute it under certain conditions.  Spfy is licensed under the [GNU General Public License v3.0](http://www.gnu.org/licenses/gpl.html).
 
 ##Acknowledgments
 Spfy uses the following third party software components:
