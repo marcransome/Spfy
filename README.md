@@ -21,7 +21,7 @@ With the prerequisites above taken care of Spfy can be installed with the follow
 	gem install spfy
 
 ##Using Spfy
-By default, Spfy will output a formatted XSPF playlist to the standard output stream that will include _location_, _title_, _artist_, and _album_ elements for each audio file where available.
+By default, Spfy will output a formatted XSPF playlist to the standard output stream that will include _location_, _creator_, _artist_, _album_, and _trackNum_ elements for each audio file where available.
 
 The general syntax for Spfy is `spfy [options] dir1 ... dirN`, where _dir1 ... dirN_ is one or more paths to directories containing audio files.
 
@@ -39,6 +39,7 @@ For example:
 				<title>A Stitch In Time</title>
 				<creator>The Smashing Pumpkins</creator>
 				<album>Teargarden by Kaleidyscope</album>
+				<trackNum>3</trackNum>
 			</track>
 		</trackList>
 	</playlist>
@@ -51,6 +52,7 @@ Command-line arguments allow you to control which elements Spfy outputs:
     -t, --no-title                   Suppress track title in output
     -a, --no-artist                  Suppress artist name in output
     -l, --no-album                   Suppress album name in output
+    -n, --no-tracknum                Suppress track number in output
 
 For additional options use `spfy --help`.
 
