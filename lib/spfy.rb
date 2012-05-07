@@ -26,7 +26,7 @@ require "taglib"
 require 'find'
 require 'uri'
 
-$version = "0.1.7"
+$version = "0.1.8"
 $dirs = []
 
 # The main Spfy class
@@ -72,6 +72,7 @@ class Spfy
 		# start processing source paths
 		begin
 			if options.output.any?
+				# source path(s) provided, output should be to disk
 			
 				xmlFile = File.open(options.output[0], "w")
 				
@@ -94,12 +95,13 @@ class Spfy
 								tag = fileref.tag
 								
 								# skip files with no tags
-								next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
+								next if tag.nil?
 								
 								# write track metadata
 								xmlFile.write("\t\t<track>\n")
 								
 								if !options.hide_location
+									# generate a percent encoded string from the local path
 									encoded_path = URI.escape(path)
 									xmlFile.write("\t\t\t<location>file://#{encoded_path}</location>\n")
 								end
@@ -107,6 +109,13 @@ class Spfy
 								xmlFile.write("\t\t\t<title>#{tag.title}</title>\n") if !options.hide_title and !tag.title.nil?
 								xmlFile.write("\t\t\t<creator>#{tag.artist}</creator>\n") if !options.hide_artist and !tag.artist.nil?
 								xmlFile.write("\t\t\t<album>#{tag.album}</album>\n") if !options.hide_album and !tag.album.nil?
+								
+								if !options.hide_tracknum and !tag.track.nil?
+									if tag.track > 0
+										xmlFile.write("\t\t\t<trackNum>#{tag.track}</trackNum>\n")
+									end
+								end
+								
 								xmlFile.write("\t\t</track>\n")
 							end
 						rescue Exception => e
@@ -123,7 +132,10 @@ class Spfy
 				
 				print " success\n"
 				
-			else		
+			else
+				# no source path(s) provided, output to stdout
+				
+				# write XSPF header
 				puts "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				puts "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"
 				puts "\t<trackList>\n"
@@ -140,8 +152,8 @@ class Spfy
 								tag = fileref.tag
 			
 								# skip files with no tags
-								next if tag.title.empty? and tag.artist.empty? and tag.album.empty?
-			
+								next if tag.nil?
+								
 								# output track metadata
 								puts "\t\t<track>\n"
 								
@@ -153,10 +165,15 @@ class Spfy
 								puts "\t\t\t<title>#{tag.title}</title>\n" if !options.hide_title and !tag.title.nil?
 								puts "\t\t\t<creator>#{tag.artist}</creator>\n" if !options.hide_artist and !tag.artist.nil?
 								puts "\t\t\t<album>#{tag.album}</album>\n" if !options.hide_album and !tag.album.nil?
+								
+								if !options.hide_tracknum and !tag.track.nil?
+									if tag.track > 0
+										puts "\t\t\t<trackNum>#{tag.track}</trackNum>\n"
+									end
+								end
+
 								puts "\t\t</track>\n"
 							end
-						rescue SystemExit, Interrupt
-							# allow user interrupt
 						rescue Exception => e
 							next
 						end

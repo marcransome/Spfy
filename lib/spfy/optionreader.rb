@@ -30,6 +30,7 @@ class OptionReader
 		options.hide_artist = false
 		options.hide_album = false
 		options.hide_location = false
+		options.hide_tracknum = false
 	
 		opts = OptionParser.new do |opts|
 			opts.banner = "Usage: #{File.basename($0)} [options] dir1 ... dirN"
@@ -60,6 +61,10 @@ class OptionReader
 			
 			opts.on("-l", "--no-album", "Suppress album name in output") do
 				options.hide_album = true
+			end
+			
+			opts.on("-n", "--no-tracknum", "Suppress track number in output") do
+				options.hide_tracknum = true
 			end
 			
 			opts.separator ""
