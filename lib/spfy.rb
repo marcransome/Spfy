@@ -91,6 +91,9 @@ class Spfy
 			xmlFile.write("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n")
 			xmlFile.write("\t<trackList>\n")
 			
+			# track count for track limit option
+			tracks_processed = 0
+			
 			# repeat for each source dir argument
 			dirs.each do |dir|
 	
@@ -126,12 +129,23 @@ class Spfy
 							end
 							
 							xmlFile.write("\t\t</track>\n")
+							
+							# increment our track processed count
+							tracks_processed += 1
+							
+							# if a maximum number track numbe has been set, test whether we have reached the limit
+							if options.tracks_to_process[0].to_i > 0 and tracks_processed == options.tracks_to_process[0].to_i 
+								# write XSPF footer
+								xmlFile.write("\t</trackList>\n")
+								xmlFile.write("</playlist>\n")
+								xmlFile.close
+								print " success\n"
+								exit
+							end
 						end
 					end
-				rescue SystemExit, Interrupt
+				rescue Interrupt
 					abort("\nCancelled, exiting..")
-				rescue Exception => e
-					next
 				end # begin
 			end # dirs.each do |dir|
 			
@@ -150,6 +164,9 @@ class Spfy
 			puts "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			puts "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"
 			puts "\t<trackList>\n"
+			
+			# track count for track limit option
+			tracks_processed = 0
 			
 			# repeat for each source dir argument
 			dirs.each do |dir|
@@ -185,12 +202,21 @@ class Spfy
 							end
 							
 							puts "\t\t</track>\n"
+							
+							# increment our track processed count
+							tracks_processed += 1
+
+							# if a maximum number track numbe has been set, test whether we have reached the limit
+							if options.tracks_to_process[0].to_i > 0 and tracks_processed == options.tracks_to_process[0].to_i 
+								# output XSPF footer
+								puts "\t</trackList>\n"
+								puts "</playlist>\n"
+								exit
+							end
 						end
 					end
-				rescue SystemExit, Interrupt
+				rescue Interrupt
 					abort("\nCancelled, exiting..")
-				rescue Exception => e
-					next
 				end # begin
 			end # dirs.each do |dir|
 			

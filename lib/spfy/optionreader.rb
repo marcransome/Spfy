@@ -32,6 +32,7 @@ class OptionReader
 		options.hide_location = false
 		options.hide_tracknum = false
 		options.dirs = []
+		options.tracks_to_process = []
 	
 		opts = OptionParser.new do |opts|
 			opts.banner = "Usage: #{File.basename($0)} [options] dir1 ... dirN"
@@ -66,6 +67,11 @@ class OptionReader
 			
 			opts.on("-n", "--no-tracknum", "Suppress track number in output") do
 				options.hide_tracknum = true
+			end
+			
+			opts.on("-m", "--max-tracks NUM", "Limit the output to NUM tracks") do |num|
+				options.tracks_to_process << num
+				options.track_limit = true
 			end
 			
 			opts.separator ""
