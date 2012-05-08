@@ -26,7 +26,7 @@ require "taglib"
 require 'find'
 require 'uri'
 
-$spfy_version = "0.1.9"
+$spfy_version = "0.2.0"
 
 # The main Spfy class
 class Spfy
