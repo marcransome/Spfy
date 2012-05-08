@@ -31,4 +31,5 @@ Gem::Specification.new do |s|
 	s.executables		<< 'spfy' 
 	s.add_runtime_dependency 'taglib-ruby', '>= 0.5.0'
 	s.homepage		= 'http://marcransome.github.com/spfy'
+	s.license		= 'GPL-3'
 end
