@@ -44,7 +44,7 @@ For example:
 		</trackList>
 	</playlist>
 	
-Spfy supports multiple directory paths (e.g. `spfy /dir1 /dir2`) and traverses each directory recursively by default.  Unsupported files and empty directories in a directory tree are silently ignored and will not impact spfy's output.
+Spfy supports multiple directory paths (e.g. `spfy /dir1 /dir2`) and traverses each directory recursively by default.  Unsupported files and empty directories in a directory tree are silently ignored and will not impact Spfy's output.
 
 Command-line arguments allow you to control which elements Spfy outputs:
 
