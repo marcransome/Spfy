@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640" />
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Spfy by marcransome</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/marcransome/spfy">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Spfy</h1>
+            <h2>A command-line tool for generating XSPF playlists from audio file metadata.</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/marcransome/spfy/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/marcransome/spfy/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h2>Overview</h2>
+
+<p><strong>Spfy</strong> is a command-line tool for generating <a href="http://xspf.org/">XSPF</a> playlists from metadata stored in several popular audio formats and is developed entirely in <a href="http://www.ruby-lang.org/">Ruby</a>.  It takes one or more local directory paths as input, extracts metadata tags from any audio files that it encounters, and generates a valid XSPF playlist.</p>
+
+<h2>Prerequisites</h2>
+
+<p>A working Ruby installation (version 1.9 or greater) is required for Spfy to work, but this is outside the scope of this guide.  For more information refer to the <a href="http://www.ruby-lang.org/en/downloads/">official installation procedure</a>.</p>
+
+<p><a href="http://developer.kde.org/%7Ewheeler/taglib.html">TagLib</a> is also required.  Follow the steps below (taken from the <a href="http://robinst.github.com/taglib-ruby/">taglib-ruby installation guide</a>) to install the necessary files for your respective system type:</p>
+
+<table>
+<tr>
+<th>System:</th>
+<th>Command:</th>
+</tr>
+<tr>
+<td>Debian/Ubuntu</td>
+<td><code>sudo apt-get install libtag1-dev</code></td>
+</tr>
+<tr>
+<td>Fedora/RHEL</td>
+<td><code>sudo yum install taglib-devel</code></td>
+</tr>
+<tr>
+<td>Brew</td>
+<td><code>brew install taglib</code></td>
+</tr>
+<tr>
+<td>MacPorts</td>
+<td><code>sudo port install taglib</code></td>
+</tr>
+</table><h2>Installation</h2>
+
+<p>With the prerequisites above taken care of Spfy can be installed with the following command:</p>
+
+<pre><code>$ gem install spfy
+</code></pre>
+
+<h2>Using Spfy</h2>
+
+<p>By default, Spfy will output a formatted XSPF playlist to the standard output stream that will include <em>location</em>, <em>title</em>, <em>creator</em>, <em>album</em>, and <em>trackNum</em> elements for each audio file where available.</p>
+
+<p>The general syntax for Spfy is <code>spfy [options] dir1 ... dirN</code>, where <em>dir1 ... dirN</em> is one or more paths to directories containing audio files.</p>
+
+<p>For example:</p>
+
+<pre><code>$ spfy ~/music
+</code></pre>
+
+<p>..will produce the following output (where ~/music contains one audio file with valid metadata):</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;playlist version="1" xmlns="http://xspf.org/ns/0/"&gt;
+    &lt;trackList&gt;
+        &lt;track&gt;
+            &lt;location&gt;file:///Users/spfy/music/03%20A%20Stitch%20In%20Time.mp3&lt;/location&gt;
+            &lt;title&gt;A Stitch In Time&lt;/title&gt;
+            &lt;creator&gt;The Smashing Pumpkins&lt;/creator&gt;
+            &lt;album&gt;Teargarden by Kaleidyscope&lt;/album&gt;
+            &lt;trackNum&gt;3&lt;/trackNum&gt;
+        &lt;/track&gt;
+    &lt;/trackList&gt;
+&lt;/playlist&gt;
+</code></pre>
+
+<p>Spfy supports multiple directory paths (e.g. <code>spfy /dir1 /dir2</code>) and traverses each directory recursively by default.  Unsupported files and empty directories in a directory tree are silently ignored and will not impact Spfy's output.</p>
+
+<p>Command-line arguments allow you to control which elements Spfy outputs:</p>
+
+<pre><code>-f, --no-location                Suppress file location output
+-t, --no-title                   Suppress track title in output
+-a, --no-artist                  Suppress artist name in output
+-l, --no-album                   Suppress album name in output
+-n, --no-tracknum                Suppress track number in output
+</code></pre>
+
+<p>For additional options use <code>spfy --help</code>.</p>
+
+<h2>License</h2>
+
+<p>Spfy is free software, and you are welcome to redistribute it under certain conditions.  See the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a> for more details.</p>
+
+<h2>Acknowledgments</h2>
+
+<p>Spfy uses the following third party software components:</p>
+
+<ul>
+<li>
+<a href="http://robinst.github.com/taglib-ruby/">taglib-ruby</a> by Robin Stocker</li>
+</ul><h2>Comments or suggestions?</h2>
+
+<p>Email me at <a href="marc.ransome@fidgetbox.co.uk">marc.ransome@fidgetbox.co.uk</a> with bug reports, feature requests or general comments and follow <a href="http://www.twitter.com/marcransome">@marcransome</a> for updates.</p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/marcransome">marcransome</a> can be found on <a href="https://github.com/marcransome/spfy">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-31478860-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
