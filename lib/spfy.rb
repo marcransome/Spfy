@@ -26,10 +26,10 @@ require "taglib"
 require 'find'
 require 'uri'
 
-$spfy_version = "0.2.1"
-
 # The main Spfy class
 class Spfy
+	
+	VERSION = "0.2.1"
 
 	##
 	# Starts the XSPF generator.

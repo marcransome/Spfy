@@ -78,7 +78,7 @@ class OptionReader
 			opts.separator "Misc options:"
 			
 			opts.on("-v", "--version", "Display version information") do
-				puts "#{File.basename($0).capitalize} #{$spfy_version} Copyright (c) 2012 Marc Ransome <marc.ransome@fidgetbox.co.uk>"
+				puts "#{File.basename($0).capitalize} #{Spfy::VERSION} Copyright (c) 2012 Marc Ransome <marc.ransome@fidgetbox.co.uk>"
 				puts "This program comes with ABSOLUTELY NO WARRANTY, use it at your own risk."
 				puts "This is free software, and you are welcome to redistribute it under"
 				puts "certain conditions; see LICENSE.txt for details."
