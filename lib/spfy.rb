@@ -29,7 +29,7 @@ require 'uri'
 # The main Spfy class
 class Spfy
 	
-	VERSION = "0.2.1"
+	VERSION = "0.2.2"
 
 	##
 	# Starts the XSPF generator.
@@ -114,7 +114,7 @@ class Spfy
 							
 							if !options.hide_location
 								# generate a percent encoded string from the local path
-								encoded_path = URI.escape(path)
+								encoded_path = URI.escape(path).sub("%5C", "/")
 								xmlFile.write("\t\t\t<location>file://#{encoded_path}</location>\n")
 							end
 							
@@ -187,7 +187,7 @@ class Spfy
 							puts "\t\t<track>\n"
 							
 							if !options.hide_location
-								encoded_path = URI.escape(path)
+								encoded_path = URI.escape(path).sub("%5C", "/")
 								puts "\t\t\t<location>file://#{encoded_path}</location>\n"
 							end
 							
