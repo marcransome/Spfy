@@ -31,19 +31,21 @@ For example:
 	
 ..will produce the following output (where ~/music contains one audio file with valid metadata):
 
-	<?xml version="1.0" encoding="UTF-8"?>
-	<playlist version="1" xmlns="http://xspf.org/ns/0/">
-		<trackList>
-			<track>
-				<location>file:///Users/spfy/music/03%20A%20Stitch%20In%20Time.mp3</location>
-				<title>A Stitch In Time</title>
-				<creator>The Smashing Pumpkins</creator>
-				<album>Teargarden by Kaleidyscope</album>
-				<trackNum>3</trackNum>
-			</track>
-		</trackList>
-	</playlist>
-	
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<playlist version="1" xmlns="http://xspf.org/ns/0/">
+	<trackList>
+		<track>
+			<location>file:///Users/spfy/music/03%20A%20Stitch%20In%20Time.mp3</location>
+			<title>A Stitch In Time</title>
+			<creator>The Smashing Pumpkins</creator>
+			<album>Teargarden by Kaleidyscope</album>
+			<trackNum>3</trackNum>
+		</track>
+	</trackList>
+</playlist>
+```
+
 Spfy supports multiple directory paths (e.g. `spfy /dir1 /dir2`) and traverses each directory recursively by default.  Unsupported files and empty directories in a directory tree are silently ignored and will not impact Spfy's output.
 
 Command-line arguments allow you to control which elements Spfy outputs:
