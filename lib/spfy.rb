@@ -112,7 +112,7 @@ class Spfy
       puts "#{@xspf_tags[:track_end]}"
       
       @tracks_processed += 1
-      
+      throw :MaxTracksReached if @options.tracks_to_process[0].to_i > 0 and @tracks_processed == @options.tracks_to_process[0].to_i
     end
   end
   
