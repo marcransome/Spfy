@@ -1,9 +1,10 @@
-# Spfy ("spiffy")
+## Spfy ("spiffy")
+[![Code Climate](https://codeclimate.com/github/marcransome/Spfy.png)](https://codeclimate.com/github/marcransome/Spfy)
 
-## Overview
+### Overview
 **Spfy** is a command-line tool for generating [XSPF](http://xspf.org/) playlists from metadata stored in several popular audio formats and is developed entirely in [Ruby](http://www.ruby-lang.org/).  It takes one or more local directory paths as input, extracts metadata tags from any audio files that it encounters, and generates a valid XSPF playlist.
 
-## Prerequisites
+### Prerequisites
 A working Ruby installation (version 1.9 or greater) is required for Spfy to work, but this is outside the scope of this guide.  For more information refer to the [official installation procedure](http://www.ruby-lang.org/en/downloads/).
 
 [TagLib](http://developer.kde.org/~wheeler/taglib.html) is also required.  Follow the steps below (taken from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
@@ -15,12 +16,12 @@ A working Ruby installation (version 1.9 or greater) is required for Spfy to wor
 | Brew          | `brew install taglib`              |
 | MacPorts      | `sudo port install taglib`         |
 
-## Installation
+### Installation
 With the prerequisites above taken care of Spfy can be installed with the following command:
 
 	$ gem install spfy
 
-## Using Spfy
+### Using Spfy
 By default, Spfy will output a formatted XSPF playlist to the standard output stream that will include _location_, _title_, _creator_, _album_, and _trackNum_ elements for each audio file where available.
 
 The general syntax for Spfy is `spfy [options] dir1 ... dirN`, where _dir1 ... dirN_ is one or more paths to directories containing audio files.
@@ -58,13 +59,13 @@ Command-line arguments allow you to control which elements Spfy outputs:
 
 For additional options use `spfy --help`.
 
-## License
+### License
 Spfy is free software, and you are welcome to redistribute it under certain conditions.  See the [GNU General Public License](http://www.gnu.org/licenses/gpl.html) for more details.
 
-## Acknowledgments
+### Acknowledgments
 Spfy uses the following third party software components:
  
 * [taglib-ruby](http://robinst.github.com/taglib-ruby/) by Robin Stocker
 
-## Comments or suggestions?
+### Comments or suggestions?
 Email me at [marc.ransome@fidgetbox.co.uk](mailto://marc.ransome@fidgetbox.co.uk) with bug reports, feature requests or general comments and follow [@marcransome](http://www.twitter.com/marcransome) for updates.
