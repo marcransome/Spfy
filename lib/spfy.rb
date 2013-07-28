@@ -18,6 +18,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Spfy.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 require "spfy/optionreader"
 require "optparse"
@@ -111,7 +112,7 @@ class Spfy
       puts "#{@xspf_tags[:track_end]}"
       
       @tracks_processed += 1
-      throw :MaxTracksReached if @options.tracks_to_process[0].to_i > 0 and @tracks_processed == @options.tracks_to_process[0].to_i
+      
     end
   end
   
@@ -123,7 +124,7 @@ class Spfy
   end
   
   def self.parse_tag(tag, hide, start_xml, end_xml)
-    if !hidden and !tag.nil?
+    if !tag.nil? and !hide
       puts "#{start_xml}#{tag}#{end_xml}"      
     end
   end
