@@ -18,7 +18,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Spfy.  If not, see <http://www.gnu.org/licenses/>.
-#
 
 require "spfy/optionreader"
 require "optparse"
@@ -99,12 +98,16 @@ class Spfy
 
   def self.xml_for_path(path)    
     TagLib::FileRef.open(path) do |fileref|  
-      tags = fileref.tag
+      tag = fileref.tag
       
-      next if tags.nil? # skip files with no tags
+      next if tag.nil? # skip files with no tags
       
       puts "#{@xspf_tags[:track_start]}"      
-      parse_file_tags(tags, path)
+      parse_location(tag, path)
+      parse_tag(tag.title, @options.hide_title, @xspf_tags[:title_start], @xspf_tags[:title_end])
+      parse_tag(tag.artist, @options.hide_artist, @xspf_tags[:artist_start], @xspf_tags[:artist_end])
+      parse_tag(tag.album, @options.hide_album, @xspf_tags[:album_start], @xspf_tags[:album_end])
+      parse_track_num(tag)
       puts "#{@xspf_tags[:track_end]}"
       
       @tracks_processed += 1
@@ -112,35 +115,27 @@ class Spfy
     end
   end
   
-  def self.parse_file_tags(tags, path)
-    tags_to_parse = ["location", "title", "artist", "album", "track_num"]
-    
-    tags_to_parse.each do |tag_name|      
-      open_tag = @xspf_tags[:"#{tag_name}_start"]
-      close_tag = @xspf_tags[:"#{tag_name}_end"] 
-      tag_value = ""    
-      
-      if tag_name.eql? "location"
-        tag_value = URI.escape(path).sub("%5C", "/")
-        
-        if !@options.hide_location
-          puts "#{@xspf_tags[:location_start]}#{tag_value}#{@xspf_tags[:location_end]}"
-        end
-      elsif tag_name.eql? "track_num"
-        if tags.track > 0
-          tag_value = tags.track
-          puts "#{@xspf_tags[:track_num_start]}#{tag_value}#{@xspf_tags[:track_num_end]}"
-        end
-      else
-        tag_value = tags.send("#{tag_name}")
-        
-        if !tags.send("#{tag_name}").nil? and !@options.send("hide_#{tag_name}")
-          puts "#{open_tag}#{tag_value}#{close_tag}"   
-        end
-      end
+  def self.parse_location(tag, path)
+    if !@options.hide_location
+      encoded_path = URI.escape(path).sub("%5C", "/") # percent encode string for local path
+      puts "#{@xspf_tags[:location_start]}#{encoded_path}#{@xspf_tags[:location_end]}"
     end
   end
   
+  def self.parse_tag(tag, hide, start_xml, end_xml)
+    if !hidden and !tag.nil?
+      puts "#{start_xml}#{tag}#{end_xml}"      
+    end
+  end
+  
+  def self.parse_track_num(tag)
+    if !@options.hide_tracknum and !tag.track.nil?
+      if tag.track > 0
+        puts "#{@xspf_tags[:track_num_start]}#{tag.track}#{@xspf_tags[:track_num_end]}"
+      end
+    end
+  end
+
   def self.exit_with_message(message)
     puts message if message
     exit_with_banner
@@ -154,5 +149,5 @@ class Spfy
   def self.capture_stdout
     $stdout = File.open(@options.output[0], "w")
   end
-  private_class_method :xml_for_path, :parse_file_tags, :exit_with_message, :exit_with_banner, :capture_stdout
+  private_class_method :xml_for_path, :parse_location, :parse_tag, :parse_track_num, :exit_with_message, :exit_with_banner, :capture_stdout
 end
