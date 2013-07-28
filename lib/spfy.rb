@@ -78,46 +78,52 @@ class Spfy
     end
     
     puts @xspf_tags[:header]
-    tracks_processed = 0
+    @tracks_processed = 0
     
     @options.dirs.each do |dir|
-      begin
-        Find.find(dir) do |path|
-          TagLib::FileRef.open(path) do |fileref|  
-            tag = fileref.tag
-            
-            next if tag.nil? # skip files with no tags
-            
-            puts "#{@xspf_tags[:track_start]}"
-            
-            if !@options.hide_location
-              encoded_path = URI.escape(path).sub("%5C", "/") # percent encode string for local path
-              puts "#{@xspf_tags[:location_start]}#{encoded_path}#{@xspf_tags[:location_end]}"
-            end
-            
-            puts "#{@xspf_tags[:title_start]}#{tag.title}#{@xspf_tags[:title_end]}" if !@options.hide_title and !tag.title.nil?
-            puts "#{@xspf_tags[:creator_start]}#{tag.artist}#{@xspf_tags[:creator_end]}" if !@options.hide_artist and !tag.artist.nil?
-            puts "#{@xspf_tags[:album_start]}#{tag.album}#{@xspf_tags[:album_end]}" if !@options.hide_album and !tag.album.nil?
-            
-            if !@options.hide_tracknum and !tag.track.nil?
-              if tag.track > 0
-                puts "#{@xspf_tags[:track_num_start]}#{tag.track}#{@xspf_tags[:track_num_end]}"
-              end
-            end
-            
-            puts "#{@xspf_tags[:track_end]}"
-            
-            tracks_processed += 1
-            break if @options.tracks_to_process[0].to_i > 0 and tracks_processed == options.tracks_to_process[0].to_i
+      catch :MaxTracksReached do
+        begin
+          Find.find(dir) do |path|
+            self.xml_for_path(path)
           end
+        rescue Interrupt
+          abort("\nCancelled, exiting..")
         end
-      rescue Interrupt
-        abort("\nCancelled, exiting..")
       end
     end
     puts @xspf_tags[:footer]
     
     $stdout = STDOUT if @options.output.any?
+  end
+
+  def self.xml_for_path(path)    
+    TagLib::FileRef.open(path) do |fileref|  
+      tag = fileref.tag
+      
+      next if tag.nil? # skip files with no tags
+      
+      puts "#{@xspf_tags[:track_start]}"
+      
+      if !@options.hide_location
+        encoded_path = URI.escape(path).sub("%5C", "/") # percent encode string for local path
+        puts "#{@xspf_tags[:location_start]}#{encoded_path}#{@xspf_tags[:location_end]}"
+      end
+      
+      puts "#{@xspf_tags[:title_start]}#{tag.title}#{@xspf_tags[:title_end]}" if !@options.hide_title and !tag.title.nil?
+      puts "#{@xspf_tags[:creator_start]}#{tag.artist}#{@xspf_tags[:creator_end]}" if !@options.hide_artist and !tag.artist.nil?
+      puts "#{@xspf_tags[:album_start]}#{tag.album}#{@xspf_tags[:album_end]}" if !@options.hide_album and !tag.album.nil?
+      
+      if !@options.hide_tracknum and !tag.track.nil?
+        if tag.track > 0
+          puts "#{@xspf_tags[:track_num_start]}#{tag.track}#{@xspf_tags[:track_num_end]}"
+        end
+      end
+      
+      puts "#{@xspf_tags[:track_end]}"
+      
+      @tracks_processed += 1
+      throw :MaxTracksReached if @options.tracks_to_process[0].to_i > 0 and @tracks_processed == @options.tracks_to_process[0].to_i
+    end
   end
 
   def self.exit_with_message(message)
