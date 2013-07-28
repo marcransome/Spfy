@@ -29,10 +29,10 @@ require "uri"
 
 class Spfy
   
-  VERSION = "0.3.1"
+  VERSION = "1.0.0"
   USAGE = "Use `#{File.basename($0)} --help` for available options."
     
-  @xspf_tags = {
+  @xml_tags = {
     :header =>          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"\
                         "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"\
                         "\t<trackList>\n",
@@ -53,7 +53,6 @@ class Spfy
   
   def self.parse_args
     begin
-      # test for zero arguments
       if ARGV.empty? then
         exit_with_banner
       end
@@ -72,15 +71,14 @@ class Spfy
   end
   
   def self.generate_xml
+    @tracks_processed = 0
 
     if @options.output.any?
       puts "Generating XML..."
       capture_stdout
     end
     
-    puts @xspf_tags[:header]
-    @tracks_processed = 0
-    
+    puts @xml_tags[:header]
     @options.dirs.each do |dir|
       catch :MaxTracksReached do
         begin
@@ -92,47 +90,47 @@ class Spfy
         end
       end
     end
-    puts @xspf_tags[:footer]
+    puts @xml_tags[:footer]
     
     $stdout = STDOUT if @options.output.any?
   end
 
   def self.xml_for_path(path)    
     TagLib::FileRef.open(path) do |fileref|  
-      tag = fileref.tag
+      tags = fileref.tag
       
-      next if tag.nil? # skip files with no tags
+      next if tags.nil? # skip files with no tags
       
-      puts "#{@xspf_tags[:track_start]}"      
-      parse_location(tag, path)
-      parse_tag(tag.title, @options.hide_title, @xspf_tags[:title_start], @xspf_tags[:title_end])
-      parse_tag(tag.artist, @options.hide_artist, @xspf_tags[:artist_start], @xspf_tags[:artist_end])
-      parse_tag(tag.album, @options.hide_album, @xspf_tags[:album_start], @xspf_tags[:album_end])
-      parse_track_num(tag)
-      puts "#{@xspf_tags[:track_end]}"
+      puts "#{@xml_tags[:track_start]}"      
+      parse_location(path)
+      parse_tag(tags.title, @options.hide_title, @xml_tags[:title_start], @xml_tags[:title_end])
+      parse_tag(tags.artist, @options.hide_artist, @xml_tags[:artist_start], @xml_tags[:artist_end])
+      parse_tag(tags.album, @options.hide_album, @xml_tags[:album_start], @xml_tags[:album_end])
+      parse_track_num(tags.track)
+      puts "#{@xml_tags[:track_end]}"
       
       @tracks_processed += 1
       throw :MaxTracksReached if @options.tracks_to_process[0].to_i > 0 and @tracks_processed == @options.tracks_to_process[0].to_i
     end
   end
   
-  def self.parse_location(tag, path)
+  def self.parse_location(path)
     if !@options.hide_location
       encoded_path = URI.escape(path).sub("%5C", "/") # percent encode string for local path
-      puts "#{@xspf_tags[:location_start]}#{encoded_path}#{@xspf_tags[:location_end]}"
+      puts "#{@xml_tags[:location_start]}#{encoded_path}#{@xml_tags[:location_end]}"
     end
   end
   
-  def self.parse_tag(tag, hide, start_xml, end_xml)
-    if !tag.nil? and !hide
+  def self.parse_tag(tag, suppress_output, start_xml, end_xml)
+    if !tag.nil? and !suppress_output
       puts "#{start_xml}#{tag}#{end_xml}"      
     end
   end
   
-  def self.parse_track_num(tag)
-    if !@options.hide_tracknum and !tag.track.nil?
-      if tag.track > 0
-        puts "#{@xspf_tags[:track_num_start]}#{tag.track}#{@xspf_tags[:track_num_end]}"
+  def self.parse_track_num(track_num)
+    if !@options.hide_tracknum and !track_num.nil?
+      if track_num > 0
+        puts "#{@xml_tags[:track_num_start]}#{track_num}#{@xml_tags[:track_num_end]}"
       end
     end
   end
