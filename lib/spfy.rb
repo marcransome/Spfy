@@ -38,8 +38,8 @@ class Spfy
     :footer =>          "\t</trackList>\n</playlist>\n",              
     :title_start =>     "\t\t\t<title>",
     :title_end =>       "</title>\n",
-    :creator_start =>   "\t\t\t<creator>",
-    :creator_end =>     "</creator>\n",
+    :artist_start =>   "\t\t\t<artist>",
+    :artist_end =>     "</artist>\n",
     :album_start =>     "\t\t\t<album>",
     :album_end =>       "</album>\n",
     :location_start =>  "\t\t\t<location>file://",
@@ -104,9 +104,9 @@ class Spfy
       
       puts "#{@xspf_tags[:track_start]}"      
       parse_location(tag, path)
-      parse_title(tag)
-      parse_creator(tag)
-      parse_album(tag)
+      parse_tag(tag.title, @options.hide_title, @xspf_tags[:title_start], @xspf_tags[:title_end])
+      parse_tag(tag.artist, @options.hide_artist, @xspf_tags[:artist_start], @xspf_tags[:artist_end])
+      parse_tag(tag.album, @options.hide_album, @xspf_tags[:album_start], @xspf_tags[:album_end])
       parse_track_num(tag)
       puts "#{@xspf_tags[:track_end]}"
       
@@ -122,21 +122,9 @@ class Spfy
     end
   end
   
-  def self.parse_title(tag)
-    if !@options.hide_title and !tag.title.nil?
-      puts "#{@xspf_tags[:title_start]}#{tag.title}#{@xspf_tags[:title_end]}"      
-    end
-  end
-  
-  def self.parse_creator(tag)
-    if !@options.hide_artist and !tag.artist.nil?
-      puts "#{@xspf_tags[:creator_start]}#{tag.artist}#{@xspf_tags[:creator_end]}"
-    end
-  end
-  
-  def self.parse_album(tag)
-    if !@options.hide_album and !tag.album.nil?
-      puts "#{@xspf_tags[:album_start]}#{tag.album}#{@xspf_tags[:album_end]}"
+  def self.parse_tag(tag, hide, start_xml, end_xml)
+    if !hidden and !tag.nil?
+      puts "#{start_xml}#{tag}#{end_xml}"      
     end
   end
   
@@ -161,5 +149,5 @@ class Spfy
   def self.capture_stdout
     $stdout = File.open(@options.output[0], "w")
   end
-  private_class_method :xml_for_path, :parse_location, :parse_title, :parse_creator, :parse_album, :parse_track_num, :exit_with_message, :exit_with_banner, :capture_stdout
+  private_class_method :xml_for_path, :parse_location, :parse_tag, :parse_track_num, :exit_with_message, :exit_with_banner, :capture_stdout
 end
