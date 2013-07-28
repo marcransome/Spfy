@@ -20,16 +20,16 @@
 #  along with Spfy.  If not, see <http://www.gnu.org/licenses/>.
 
 Gem::Specification.new do |s|
-	s.name			= 'spfy'
-	s.version		= '0.2.2'
-	s.date			= '2013-02-26'
-	s.summary		= 'XSPF playlist generator'
-	s.description	= 'Spfy is a simple command-line tool for generating XSPF playlists from metadata stored in several popular audio formats.'
-	s.authors		= ["Marc Ransome"]
-	s.email			= 'marc.ransome@fidgetbox.co.uk'
-	s.files			= `git ls-files`.split("\n")
-	s.executables		<< 'spfy' 
-	s.add_runtime_dependency 'taglib-ruby', '>= 0.5.0'
-	s.homepage		= 'http://marcransome.github.com/spfy'
-	s.license		= 'GPL-3'
+  s.name        = 'spfy'
+  s.version     = '0.3.0'
+  s.date        = '2013-07-28'
+  s.summary     = 'XSPF playlist generator'
+  s.description = 'Spfy is a simple command-line tool for generating XSPF playlists from metadata stored in several popular audio formats.'
+  s.authors     = ["Marc Ransome"]
+  s.email       = 'marc.ransome@fidgetbox.co.uk'
+  s.files       = `git ls-files`.split("\n")
+  s.executables << 'spfy' 
+  s.add_runtime_dependency 'taglib-ruby', '>= 0.5.0'
+  s.homepage    = 'http://marcransome.github.com/spfy'
+  s.license     = 'GPL-3'
 end
