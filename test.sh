@@ -20,7 +20,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Spfy.  If not, see <http://www.gnu.org/licenses/>.
 
-version_from_gemspec=$( grep 's.version' spfy.gemspec | cut -c 16-20 )
+version_from_gemspec=$( grep 's.version' spfy.gemspec | cut -c 20-24 )
 gem_file="spfy-$version_from_gemspec.gem"
 
 echo "Removing outdated gem files.."
