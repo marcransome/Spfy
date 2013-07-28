@@ -2,4 +2,5 @@
 
 require 'spfy'
 
-Spfy.generate
+Spfy.parse_args
+Spfy.generate_xml
