@@ -28,7 +28,7 @@ require "uri"
 
 class Spfy
   
-  VERSION = "1.0.0"
+  VERSION = "0.3.1"
   USAGE = "Use `#{File.basename($0)} --help` for available options."
     
   @xspf_tags = {
