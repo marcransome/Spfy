@@ -18,6 +18,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Spfy.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 Gem::Specification.new do |s|
   s.name        = 'spfy'
