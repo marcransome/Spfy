@@ -17,11 +17,11 @@
         $('#main_content').headsmart()
       })
     </script>
-    <title>Spfy by Marc Ransome</title>
+    <title>Spfy by marcransome</title>
   </head>
 
   <body>
-    <a id="forkme_banner" href="https://github.com/marcransome/spfy">View on GitHub</a>
+    <a id="forkme_banner" href="https://github.com/marcransome/Spfy">View on GitHub</a>
     <div class="shell">
 
       <header>
@@ -37,7 +37,7 @@
 
       <section id="downloads">
         <span class="inner">
-          <a href="https://github.com/marcransome/spfy/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/marcransome/spfy/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+          <a href="https://github.com/marcransome/Spfy/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/marcransome/Spfy/tarball/master" class="tgz"><em>download</em> .TGZ</a>
         </span>
       </section>
 
@@ -46,21 +46,24 @@
 
 
       <section id="main_content">
-        <h2>Overview</h2>
+        <h3>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h3>
 
 <p><strong>Spfy</strong> is a command-line tool for generating <a href="http://xspf.org/">XSPF</a> playlists from metadata stored in several popular audio formats and is developed entirely in <a href="http://www.ruby-lang.org/">Ruby</a>.  It takes one or more local directory paths as input, extracts metadata tags from any audio files that it encounters, and generates a valid XSPF playlist.</p>
 
-<h2>Prerequisites</h2>
+<h3>
+<a name="prerequisites" class="anchor" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites</h3>
 
 <p>A working Ruby installation (version 1.9 or greater) is required for Spfy to work, but this is outside the scope of this guide.  For more information refer to the <a href="http://www.ruby-lang.org/en/downloads/">official installation procedure</a>.</p>
 
 <p><a href="http://developer.kde.org/%7Ewheeler/taglib.html">TagLib</a> is also required.  Follow the steps below (taken from the <a href="http://robinst.github.com/taglib-ruby/">taglib-ruby installation guide</a>) to install the necessary files for your respective system type:</p>
 
 <table>
-<tr>
+<thead><tr>
 <th>System:</th>
 <th>Command:</th>
-</tr>
+</tr></thead>
+<tbody>
 <tr>
 <td>Debian/Ubuntu</td>
 <td><code>sudo apt-get install libtag1-dev</code></td>
@@ -77,14 +80,17 @@
 <td>MacPorts</td>
 <td><code>sudo port install taglib</code></td>
 </tr>
-</table><h2>Installation</h2>
+</tbody>
+</table><h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
 
 <p>With the prerequisites above taken care of Spfy can be installed with the following command:</p>
 
 <pre><code>$ gem install spfy
 </code></pre>
 
-<h2>Using Spfy</h2>
+<h3>
+<a name="using-spfy" class="anchor" href="#using-spfy"><span class="octicon octicon-link"></span></a>Using Spfy</h3>
 
 <p>By default, Spfy will output a formatted XSPF playlist to the standard output stream that will include <em>location</em>, <em>title</em>, <em>creator</em>, <em>album</em>, and <em>trackNum</em> elements for each audio file where available.</p>
 
@@ -97,19 +103,19 @@
 
 <p>..will produce the following output (where ~/music contains one audio file with valid metadata):</p>
 
-<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;playlist version="1" xmlns="http://xspf.org/ns/0/"&gt;
-    &lt;trackList&gt;
-        &lt;track&gt;
-            &lt;location&gt;file:///Users/spfy/music/03%20A%20Stitch%20In%20Time.mp3&lt;/location&gt;
-            &lt;title&gt;A Stitch In Time&lt;/title&gt;
-            &lt;creator&gt;The Smashing Pumpkins&lt;/creator&gt;
-            &lt;album&gt;Teargarden by Kaleidyscope&lt;/album&gt;
-            &lt;trackNum&gt;3&lt;/trackNum&gt;
-        &lt;/track&gt;
-    &lt;/trackList&gt;
-&lt;/playlist&gt;
-</code></pre>
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;playlist</span> <span class="na">version=</span><span class="s">"1"</span> <span class="na">xmlns=</span><span class="s">"http://xspf.org/ns/0/"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;trackList&gt;</span>
+        <span class="nt">&lt;track&gt;</span>
+            <span class="nt">&lt;location&gt;</span>file:///Users/spfy/music/03%20A%20Stitch%20In%20Time.mp3<span class="nt">&lt;/location&gt;</span>
+            <span class="nt">&lt;title&gt;</span>A Stitch In Time<span class="nt">&lt;/title&gt;</span>
+            <span class="nt">&lt;creator&gt;</span>The Smashing Pumpkins<span class="nt">&lt;/creator&gt;</span>
+            <span class="nt">&lt;album&gt;</span>Teargarden by Kaleidyscope<span class="nt">&lt;/album&gt;</span>
+            <span class="nt">&lt;trackNum&gt;</span>3<span class="nt">&lt;/trackNum&gt;</span>
+        <span class="nt">&lt;/track&gt;</span>
+    <span class="nt">&lt;/trackList&gt;</span>
+<span class="nt">&lt;/playlist&gt;</span>
+</pre></div>
 
 <p>Spfy supports multiple directory paths (e.g. <code>spfy /dir1 /dir2</code>) and traverses each directory recursively by default.  Unsupported files and empty directories in a directory tree are silently ignored and will not impact Spfy's output.</p>
 
@@ -124,26 +130,29 @@
 
 <p>For additional options use <code>spfy --help</code>.</p>
 
-<h2>License</h2>
+<h3>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
 
 <p>Spfy is free software, and you are welcome to redistribute it under certain conditions.  See the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a> for more details.</p>
 
-<h2>Acknowledgments</h2>
+<h3>
+<a name="acknowledgments" class="anchor" href="#acknowledgments"><span class="octicon octicon-link"></span></a>Acknowledgments</h3>
 
 <p>Spfy uses the following third party software components:</p>
 
 <ul>
 <li>
 <a href="http://robinst.github.com/taglib-ruby/">taglib-ruby</a> by Robin Stocker</li>
-</ul><h2>Comments or suggestions?</h2>
+</ul><h3>
+<a name="comments-or-suggestions" class="anchor" href="#comments-or-suggestions"><span class="octicon octicon-link"></span></a>Comments or suggestions?</h3>
 
-<p>Email me at <a href="marc.ransome@fidgetbox.co.uk">marc.ransome@fidgetbox.co.uk</a> with bug reports, feature requests or general comments and follow <a href="http://www.twitter.com/marcransome">@marcransome</a> for updates.</p>
+<p>Email me at <a href="mailto://marc.ransome@fidgetbox.co.uk">marc.ransome@fidgetbox.co.uk</a> with bug reports, feature requests or general comments and follow <a href="http://www.twitter.com/marcransome">@marcransome</a> for updates.</p>
       </section>
 
       <footer>
         <span class="ribbon-outer">
           <span class="ribbon-inner">
-            <p>this project by <a href="https://github.com/marcransome">marcransome</a> can be found on <a href="https://github.com/marcransome/spfy">GitHub</a></p>
+            <p>this project by <a href="https://github.com/marcransome">marcransome</a> can be found on <a href="https://github.com/marcransome/Spfy">GitHub</a></p>
           </span>
           <span class="left-tail"></span>
           <span class="right-tail"></span>
