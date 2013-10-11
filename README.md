@@ -66,5 +66,5 @@ Spfy uses the following third party software components:
  
 * [taglib-ruby](http://robinst.github.com/taglib-ruby/) by Robin Stocker
 
-### Comments or suggestions?
-Email me at [marc.ransome@fidgetbox.co.uk](mailto://marc.ransome@fidgetbox.co.uk) with bug reports, feature requests or general comments and follow [@marcransome](http://www.twitter.com/marcransome) for updates.
+### Contact
+Email me at [marc.ransome@fidgetbox.co.uk](mailto:marc.ransome@fidgetbox.co.uk) or tweet [@marcransome](http://www.twitter.com/marcransome).
