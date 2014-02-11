@@ -61,7 +61,7 @@ For additional options use `spfy --help`.
 ### License
 Spfy is free software, and you are welcome to redistribute it under certain conditions.  See the [GNU General Public License](http://www.gnu.org/licenses/gpl.html) for more details.
 
-### Acknowledgments
+### Acknowledgements
 Spfy uses the following third party software components:
  
 * [taglib-ruby](http://robinst.github.com/taglib-ruby/) by Robin Stocker
