@@ -3,11 +3,11 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=640" />
+    <meta name="viewport" content="width=640">
 
-    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
-    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
 
     <script type="text/javascript" src="javascripts/modernizr.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -17,7 +17,7 @@
         $('#main_content').headsmart()
       })
     </script>
-    <title>Spfy by Marc Ransome</title>
+    <title>Spfy by marcransome</title>
   </head>
 
   <body>
@@ -47,22 +47,24 @@
 
       <section id="main_content">
         <h3>
-<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h3>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h3>
 
 <p><strong>Spfy</strong> is a command-line tool for generating <a href="http://xspf.org/">XSPF</a> playlists from metadata stored in several popular audio formats and is developed entirely in <a href="http://www.ruby-lang.org/">Ruby</a>.  It takes one or more local directory paths as input, extracts metadata tags from any audio files that it encounters, and generates a valid XSPF playlist.</p>
 
 <h3>
-<a name="prerequisites" class="anchor" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites</h3>
+<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prerequisites</h3>
 
 <p>A working Ruby installation (version 1.9 or greater) is required for Spfy to work, but this is outside the scope of this guide.  For more information refer to the <a href="http://www.ruby-lang.org/en/downloads/">official installation procedure</a>.</p>
 
 <p><a href="http://developer.kde.org/%7Ewheeler/taglib.html">TagLib</a> is also required.  Follow the steps below (taken from the <a href="http://robinst.github.com/taglib-ruby/">taglib-ruby installation guide</a>) to install the necessary files for your respective system type:</p>
 
 <table>
-<thead><tr>
+<thead>
+<tr>
 <th>System:</th>
 <th>Command:</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr>
 <td>Debian/Ubuntu</td>
@@ -81,8 +83,10 @@
 <td><code>sudo port install taglib</code></td>
 </tr>
 </tbody>
-</table><h3>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+</table>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
 
 <p>With the prerequisites above taken care of Spfy can be installed with the following command:</p>
 
@@ -90,7 +94,7 @@
 </code></pre>
 
 <h3>
-<a name="using-spfy" class="anchor" href="#using-spfy"><span class="octicon octicon-link"></span></a>Using Spfy</h3>
+<a id="using-spfy" class="anchor" href="#using-spfy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Spfy</h3>
 
 <p>By default, Spfy will output a formatted XSPF playlist to the standard output stream that will include <em>location</em>, <em>title</em>, <em>creator</em>, <em>album</em>, and <em>trackNum</em> elements for each audio file where available.</p>
 
@@ -103,19 +107,18 @@
 
 <p>..will produce the following output (where ~/music contains one audio file with valid metadata):</p>
 
-<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;playlist</span> <span class="na">version=</span><span class="s">"1"</span> <span class="na">xmlns=</span><span class="s">"http://xspf.org/ns/0/"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;trackList&gt;</span>
-        <span class="nt">&lt;track&gt;</span>
-            <span class="nt">&lt;location&gt;</span>file:///Users/spfy/music/03%20A%20Stitch%20In%20Time.mp3<span class="nt">&lt;/location&gt;</span>
-            <span class="nt">&lt;title&gt;</span>A Stitch In Time<span class="nt">&lt;/title&gt;</span>
-            <span class="nt">&lt;creator&gt;</span>The Smashing Pumpkins<span class="nt">&lt;/creator&gt;</span>
-            <span class="nt">&lt;album&gt;</span>Teargarden by Kaleidyscope<span class="nt">&lt;/album&gt;</span>
-            <span class="nt">&lt;trackNum&gt;</span>3<span class="nt">&lt;/trackNum&gt;</span>
-        <span class="nt">&lt;/track&gt;</span>
-    <span class="nt">&lt;/trackList&gt;</span>
-<span class="nt">&lt;/playlist&gt;</span>
-</pre></div>
+<div class="highlight highlight-xml"><pre>&lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s1"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s1"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>?&gt;
+&lt;<span class="pl-ent">playlist</span> <span class="pl-e">version</span>=<span class="pl-s1"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span>http://xspf.org/ns/0/<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">trackList</span>&gt;
+        &lt;<span class="pl-ent">track</span>&gt;
+            &lt;<span class="pl-ent">location</span>&gt;file:///Users/spfy/music/03%20A%20Stitch%20In%20Time.mp3&lt;/<span class="pl-ent">location</span>&gt;
+            &lt;<span class="pl-ent">title</span>&gt;A Stitch In Time&lt;/<span class="pl-ent">title</span>&gt;
+            &lt;<span class="pl-ent">creator</span>&gt;The Smashing Pumpkins&lt;/<span class="pl-ent">creator</span>&gt;
+            &lt;<span class="pl-ent">album</span>&gt;Teargarden by Kaleidyscope&lt;/<span class="pl-ent">album</span>&gt;
+            &lt;<span class="pl-ent">trackNum</span>&gt;3&lt;/<span class="pl-ent">trackNum</span>&gt;
+        &lt;/<span class="pl-ent">track</span>&gt;
+    &lt;/<span class="pl-ent">trackList</span>&gt;
+&lt;/<span class="pl-ent">playlist</span>&gt;</pre></div>
 
 <p>Spfy supports multiple directory paths (e.g. <code>spfy /dir1 /dir2</code>) and traverses each directory recursively by default.  Unsupported files and empty directories in a directory tree are silently ignored and will not impact Spfy's output.</p>
 
@@ -131,20 +134,22 @@
 <p>For additional options use <code>spfy --help</code>.</p>
 
 <h3>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h3>
 
 <p>Spfy is free software, and you are welcome to redistribute it under certain conditions.  See the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a> for more details.</p>
 
 <h3>
-<a name="acknowledgements" class="anchor" href="#acknowledgements"><span class="octicon octicon-link"></span></a>Acknowledgements</h3>
+<a id="acknowledgements" class="anchor" href="#acknowledgements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Acknowledgements</h3>
 
 <p>Spfy uses the following third party software components:</p>
 
 <ul>
 <li>
 <a href="http://robinst.github.com/taglib-ruby/">taglib-ruby</a> by Robin Stocker</li>
-</ul><h3>
-<a name="contact" class="anchor" href="#contact"><span class="octicon octicon-link"></span></a>Contact</h3>
+</ul>
+
+<h3>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h3>
 
 <p>Email me at <a href="mailto:marc.ransome@fidgetbox.co.uk">marc.ransome@fidgetbox.co.uk</a> or tweet <a href="http://www.twitter.com/marcransome">@marcransome</a>.</p>
       </section>
