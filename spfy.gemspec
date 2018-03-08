@@ -1,36 +1,19 @@
-#
-#  spfy.gemspec
-#  Spfy ("spiffy")
-#
-#  Copyright (c) 2012, Marc Ransome <marc.ransome@fidgetbox.co.uk>
-#
-#  This file is part of Spfy.
-#
-#  Spfy is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  Spfy is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Spfy.  If not, see <http://www.gnu.org/licenses/>.
-#
+# -*- encoding: utf-8 -*-
+require File.expand_path('../lib/spfy/version', __FILE__)
 
-Gem::Specification.new do |s|
-  s.name        = 'spfy'
-  s.version     = '1.0.0'
-  s.date        = '2013-07-28'
-  s.summary     = 'XSPF playlist generator'
-  s.description = 'Spfy is a simple command-line tool for generating XSPF playlists from metadata stored in several popular audio formats.'
-  s.authors     = ["Marc Ransome"]
-  s.email       = 'marc.ransome@fidgetbox.co.uk'
-  s.files       = `git ls-files`.split("\n")
-  s.executables << 'spfy' 
-  s.add_runtime_dependency 'taglib-ruby', '>= 0.5.0'
-  s.homepage    = 'http://marcransome.github.com/spfy'
-  s.license     = 'GPL-3'
+Gem::Specification.new do |gem|
+  gem.name            = "spfy"
+  gem.version         = Spfy::VERSION
+  gem.summary         = 'XSPF playlist generator'
+  gem.description     = 'Spfy is a simple command-line tool for generating XSPF playlists from metadata stored in several popular audio formats.'
+  gem.authors         = ["Marc Ransome"]
+  gem.email           = 'marc.ransome@fidgetbox.co.uk'
+  gem.files           = `git ls-files`.split("\n")
+  gem.test_files      = gem.files.grep(%r{^(test|spec|features)/})
+  gem.bindir          = "exe"
+  gem.executables     = gem.files.grep(%r{^exe/}).map{ |f| File.basename(f) }
+  gem.add_runtime_dependency 'taglib-ruby', '>= 0.5.0'
+  gem.add_runtime_dependency "docopt", ">= 0.6.1"
+  gem.homepage        = 'https://github.com/marcransome/Spfy'
+  gem.license         = 'GPL-3'
 end

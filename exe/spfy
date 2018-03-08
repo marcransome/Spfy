@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'spfy'
+require 'docopts'
+
+
+USAGE = "Use `#{File.basename($0)} --help` for available options."
+
+Spfy.parse_args
+Spfy.generate_xml
