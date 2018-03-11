@@ -14,4 +14,4 @@ config/
 backup/
 scratch/
 .yardoc/
-spec/support/fixtures
+spec/support/fixtures/albums
