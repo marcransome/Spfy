@@ -2,6 +2,7 @@ require "taglib"
 require 'tilt'
 require 'pathname'
 require 'time'
+require 'uri'
 
 # Create XSPF playlist files
 module Spfy
@@ -22,7 +23,18 @@ module Spfy
 
     # The file path
     attr_reader :path
-    alias_method :location, :path
+
+
+    # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.5
+    def location
+      if @location.nil?
+        path = @path.absolute? ? @path : @path.realpath
+        @location = URI.join('file:///', URI.escape(path.to_path) )
+      end
+      @location
+#     rescue Errno::ENOENT => e
+      # Log somewhere
+    end
 
     # The targeted sub-elements
     attr_accessor :album, :artist, :comment, :genre, :title, :trackNum, :year

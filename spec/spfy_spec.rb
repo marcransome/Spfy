@@ -17,7 +17,12 @@ describe "Track" do
     Given(:path) { Albums.join("mp4/mp4.m4a") }
     Given(:track) { Spfy::Track.new path }
     # Mung the path in the file so it works on any machine
-    Given(:xml_comparator) { Fixtures.join("mp4.m4a.xml").read.sub /FIXTURE/, Albums.join("mp4/mp4.m4a").to_path }
+    Given(:xml_comparator) {
+      track = Albums.join("mp4/mp4.m4a").to_path
+      Fixtures.join("mp4.m4a.xml")
+        .read
+        .sub /FIXTURE/, URI.join( "file:///", URI.escape( track )).to_s
+    }
     When(:xml) { track.to_xml }
     Then { cmd(xml.chomp) == cmd( xml_comparator.chomp ) }
   end
@@ -45,8 +50,9 @@ describe "Playlist" do
     }
     Given(:playlist) { Spfy::Playlist.new( options ) }
     Given(:xml_comparator) {
+      track = Albums.join("mp4/mp4.m4a").to_path
       Fixtures.join("mp4.m4a.playlist.xml").read
-        .sub( /FIXTURE/, Albums.join("mp4/mp4.m4a").to_path )
+        .sub( /FIXTURE/, URI.join( "file:///", URI.escape( track )).to_s  )
         .sub( /USER/, ENV["USER"] )
     }
     When(:xml) { playlist.to_xml }
@@ -80,7 +86,7 @@ describe "Playlist" do
     Given(:playlist) { Spfy::Playlist.new( options ) }
     Given(:xml_comparator) {
       Fixtures.join("mp3.playlist.xml").read
-        .gsub( /ALBUMS/, Albums.to_path )
+        .gsub( /ALBUMS/, URI.join( "file:///", URI.escape( Albums.to_path)).to_s )
         .sub( /USER/, ENV["USER"] )
     }
     When(:xml) { playlist.to_xml }
@@ -109,7 +115,7 @@ describe "Playlist" do
     Given(:playlist) { Spfy::Playlist.new( options ) }
     Given(:xml_comparator) {
       Fixtures.join("all-albums.playlist.xml").read
-        .gsub( /ALBUMS/, Albums.to_path )
+        .gsub( /ALBUMS/, URI.join( "file:///", URI.escape( Albums.to_path)).to_s )
         .sub( /USER/, ENV["USER"] )
     }
     When(:xml) { playlist.to_xml }
@@ -138,7 +144,7 @@ describe "Playlist" do
     Given(:playlist) { Spfy::Playlist.new( options ) }
     Given(:xml_comparator) {
       Fixtures.join("mp3-and-mp4.playlist.xml").read
-        .gsub( /ALBUMS/, Albums.to_path )
+        .gsub( /ALBUMS/, URI.join( "file:///", URI.escape( Albums.to_path)).to_s  )
         .sub( /USER/, ENV["USER"] )
     }
     When(:xml) { playlist.to_xml }
