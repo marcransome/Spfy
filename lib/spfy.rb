@@ -1,129 +1,182 @@
-require "spfy/optionreader"
-require "optparse"
-require "ostruct"
 require "taglib"
-require "find"
-require "uri"
+require 'tilt'
+require 'pathname'
+require 'time'
 
+# Create XSPF playlist files
 module Spfy
 
-  class Base
-    @xml_tags = {
-      :header =>          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"\
-                          "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n"\
-                          "\t<trackList>\n",
-      :footer =>          "\t</trackList>\n</playlist>\n",              
-      :title_start =>     "\t\t\t<title>",
-      :title_end =>       "</title>\n",
-      :artist_start =>   "\t\t\t<creator>",
-      :artist_end =>     "</creator>\n",
-      :album_start =>     "\t\t\t<album>",
-      :album_end =>       "</album>\n",
-      :location_start =>  "\t\t\t<location>file://",
-      :location_end =>    "</location>\n",
-      :track_start =>     "\t\t<track>\n",
-      :track_end =>       "\t\t</track>\n",
-      :track_num_start => "\t\t\t<trackNum>",
-      :track_num_end =>   "</trackNum>\n"
-    }
-  
-    def self.parse_args
-      begin
-        if ARGV.empty? then
-          exit_with_banner
+  # Locations of the ERB templates
+  TEMPLATES = Pathname(__dir__).join("templates")
+
+  # Produces the track entity
+  # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.14.1.1
+  class Track
+    def initialize path, options: {}
+      @path = Pathname(path).expand_path
+      @template = Tilt::ERBTemplate.new(TEMPLATES.join("track.xml.erb"))
+      @processed = false
+      @available_tags = [:location, :album, :artist, :comment, :genre, :title, :trackNum, :year]
+      process
+    end
+
+    # The file path
+    attr_reader :path
+    alias_method :location, :path
+
+    # The targeted sub-elements
+    attr_accessor :album, :artist, :comment, :genre, :title, :trackNum, :year
+
+
+    # For a block {|name,tag| ... }
+    # @yield [name,tag] Yield the element name and its contents.
+    def each_tag skip_nils=true
+      return enum_for(:each_tag) unless block_given?
+      @available_tags.each do |tag|
+        contents = self.send(tag)
+        if skip_nils and (
+           contents.nil? or 
+           (contents.respond_to?(:empty?) and contents.empty?)
+          )
+          next
         end
-      
-        # parse command-line arguments
-        @options = OptionReader.parse(ARGV)
-      
-        # test for zero source paths
-        if @options.dirs.empty?
-          exit_with_message("No source path(s) specified.")
-        end
-      
-      rescue OptionParser::InvalidOption, OptionParser::MissingArgument => error
-        exit_with_message(error.to_s.capitalize)
+        yield tag, contents
       end
     end
-  
-    def self.generate_xml
-      @tracks_processed = 0
 
-      if @options.output.any?
-        puts "Generating XML..."
-        capture_stdout
+
+    # @private
+    # Process the options into a track entity.
+    # Calls TagLib
+    def process refresh=false
+      if refresh or @processed == false
+        TagLib::FileRef.open(@path.to_path) do |fileref|  
+          tags = fileref.tag
+  
+          next if tags.nil? # skip files with no tags
+
+          @album    = tags.album
+          @artist   = tags.artist
+          @comment  = tags.comment
+          @genre    = tags.genre
+          @title    = tags.title
+          @trackNum = tags.track
+          @year     = tags.year
+        end
+        @processed = true
       end
-    
-      puts @xml_tags[:header]
-      @options.dirs.each do |dir|
-        catch :MaxTracksReached do
-          begin
-            Find.find(dir) do |path|
-              xml_for_path(path)
+    end
+
+
+    # The renderer
+    # @return [String]
+    def to_xml
+      process
+      @template.render(self)
+    end
+  end
+
+
+  # Produces the playlist entity
+  # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1
+  class Playlist
+
+    def initialize options
+      set_traps_for_signals
+      @options = options
+      @files = []
+      @template = Tilt::ERBTemplate.new(TEMPLATES.join("playlist.xml.erb"))
+      parse @options
+    end
+
+    attr_reader :creator, :title, :options, :paths
+
+    # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.3
+    def annotation
+      @annotation
+    end
+
+
+    # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.8
+    def date
+      Time.now.iso8601
+    end
+
+
+    # @private
+    # The option parser
+    # spfy here there and everywhere
+    # {
+    #   "--help"        =>  false,
+    #   "--output"      =>  nil,
+    #   "--title"       =>  nil,
+    #   "--creator"     =>  nil,
+    #   "--date"        =>  nil,
+    #   "--annotation"  =>  nil,
+    #   "--no-location" =>  false,
+    #   "--no-title"    =>  false,
+    #   "--no-artist"   =>  false,
+    #   "--no-album"    =>  false,
+    #   "--no-tracknum" =>  false,
+    #   "--max-tracks"  =>  nil,
+    #   "PATHS"=>["spec/support/fixtures/albums/mp4/mp4.m4a"],
+    #   "--version"     =>  false
+    # }
+    def parse options
+      @paths = (options.fetch "PATHS", []).map{|path| Pathname(path.sub /^~/, ENV["HOME"]) }
+      return if @paths.empty?
+      @title = if options["--title"]
+        options["--title"]
+      else
+        if @paths.first.directory?
+          @paths.first.basename
+        else
+          @paths.first.parent.basename
+        end
+      end
+      @creator = options["--creator"] || ENV["USER"]
+      @annotation = options["--annotation"] || "Created with Spfy.rb"
+      @noes = options.select{|k,v| k =~ /^\-\-no\-/ and v }
+      #@max_tracks = @option["--max-tracks"]
+    end
+
+
+    # @private
+    # For interruptions
+    def set_traps_for_signals
+      trap(:SIGINT) do
+        warn "  Received Ctrl+c"
+        # cleanup
+        exit 0
+      end
+    end
+
+
+    # Render the playlist and any tracks.
+    def to_xml
+      return "" if @paths.empty?
+      #catch :MaxTracksReached {
+      @template.render(self) do
+        mapped = []
+        @paths.each { |path|
+          if path.directory?
+            path.find do |pn|
+              if pn.directory?
+                pn.basename.to_s[0] == '.' ?
+                  Find.prune :
+                  next
+              else
+                mapped << Spfy::Track.new(pn)
+              end
             end
-          rescue Interrupt
-            abort("\nCancelled, exiting..")
+          else
+            mapped << Spfy::Track.new(path)
           end
-        end
+        }
+        mapped.map(&:to_xml).join("\n")
       end
-      puts @xml_tags[:footer]
-    
-      $stdout = STDOUT if @options.output.any?
+      #}
     end
 
-    def self.xml_for_path(path)    
-      TagLib::FileRef.open(path) do |fileref|  
-        tags = fileref.tag
-      
-        next if tags.nil? # skip files with no tags
-      
-        puts "#{@xml_tags[:track_start]}"      
-        parse_location(path)
-        parse_tag(tags.title, @options.hide_title, @xml_tags[:title_start], @xml_tags[:title_end])
-        parse_tag(tags.artist, @options.hide_artist, @xml_tags[:artist_start], @xml_tags[:artist_end])
-        parse_tag(tags.album, @options.hide_album, @xml_tags[:album_start], @xml_tags[:album_end])
-        parse_track_num(tags.track)
-        puts "#{@xml_tags[:track_end]}"
-      
-        @tracks_processed += 1
-        throw :MaxTracksReached if @options.tracks_to_process[0].to_i > 0 and @tracks_processed == @options.tracks_to_process[0].to_i
-      end
-    end
-  
-    def self.parse_location(path)
-      if !@options.hide_location
-        encoded_path = URI.escape(path).sub("%5C", "/") # percent encode string for local path
-        puts "#{@xml_tags[:location_start]}#{encoded_path}#{@xml_tags[:location_end]}"
-      end
-    end
-  
-    def self.parse_tag(tag, suppress_output, start_xml, end_xml)
-      if !tag.nil? and !suppress_output
-        puts "#{start_xml}#{tag}#{end_xml}"      
-      end
-    end
-  
-    def self.parse_track_num(track_num)
-      if !@options.hide_tracknum and !track_num.nil?
-        if track_num > 0
-          puts "#{@xml_tags[:track_num_start]}#{track_num}#{@xml_tags[:track_num_end]}"
-        end
-      end
-    end
-
-    def self.exit_with_message(message)
-      puts message if message
-      exit_with_banner
-    end
-  
-    def self.exit_with_banner
-      puts USAGE
-      exit
-    end
-    
-    def self.capture_stdout
-      $stdout = File.open(@options.output[0], "w")
-    end
-    private_class_method :xml_for_path, :parse_location, :parse_tag, :parse_track_num, :exit_with_message, :exit_with_banner, :capture_stdout
   end
 end

@@ -1,10 +1,43 @@
 #!/usr/bin/env ruby
 
 require 'spfy'
-require 'docopts'
+require 'docopt'
 
+doc = <<DOCOPT
+Grab and output XSPF data for media files. See http://xspf.org/ for the data definition.
 
-USAGE = "Use `#{File.basename($0)} --help` for available options."
+Usage:
+  #{__FILE__} [options] PATHS...
+  #{__FILE__} --version
 
-Spfy.parse_args
-Spfy.generate_xml
+Options:
+  -h --help                     Show this help message and exit
+  -v --version                  Display version information
+  -o FILE --output=FILE         File to write to, otherwise output to STDOUT
+  -t TITLE --title=TITLE        Playlist title
+  -c CREATOR --creator=CREATOR  Playlist creator, defaults to env $USER
+  -d DATE --date=DATE           Playlist creation date, defaults to now
+  -a NOTE --annotation=NOTE     Playlist annotation, default: "Created with Spfy.rb"
+  --no-location                 Suppress file location output
+  --no-title                    Suppress track title in output
+  --no-artist                   Suppress artist name in output
+  --no-album                    Suppress album name in output
+  --no-tracknum                 Suppress track number in output
+  --max-tracks NUM              Limit the output to NUM tracks
+DOCOPT
+
+begin
+  options = Docopt::docopt(doc, version: Spfy::VERSION)
+rescue Docopt::Exit => e
+  puts e.message
+end
+
+playlist = Spfy::Playlist.new options
+
+blk = ->(f){ f.puts playlist.to_xml }
+
+if options["--output"]
+  File.open(options["--output"], "w", &blk)
+else
+  blk.call(Kernel)
+end
