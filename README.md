@@ -14,6 +14,7 @@ A working Ruby installation (version 1.9 or greater) is required for Spfy to wor
 | Fedora/RHEL   | `sudo yum install taglib-devel`    |
 | Brew          | `brew install taglib`              |
 | MacPorts      | `sudo port install taglib`         |
+| Pkgsrc        | `(sudo) pkgin install taglib`      |
 
 ### Installation
 With the prerequisites above taken care of Spfy can be installed with the following command:
