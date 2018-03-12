@@ -161,8 +161,6 @@ describe "Playlist" do
   context "Most simple case", :time_sensitive do
     Given(:options) {
       {
-        "--help"        =>  false,
-        "--output"      =>  nil,
         "--title"       =>  nil,
         "--creator"     =>  nil,
         "--date"        =>  nil,
@@ -174,7 +172,6 @@ describe "Playlist" do
         "--no-tracknum" =>  false,
         "--max-tracks"  =>  nil,
         "PATHS"=>["spec/support/fixtures/albums/mp4/mp4.m4a"],
-        "--version"     =>  false
       }
     }
     Given(:playlist) { Spfy::Playlist.new( options ) }
@@ -196,8 +193,6 @@ describe "Playlist" do
   context "A directory of files", :time_sensitive do
     Given(:options) {
       {
-        "--help"        =>  false,
-        "--output"      =>  nil,
         "--title"       =>  nil,
         "--creator"     =>  nil,
         "--date"        =>  nil,
@@ -209,7 +204,6 @@ describe "Playlist" do
         "--no-tracknum" =>  false,
         "--max-tracks"  =>  nil,
         "PATHS"=>["spec/support/fixtures/albums/mp3"],
-        "--version"     =>  false
       }
     }
     Given(:playlist) { Spfy::Playlist.new( options ) }
@@ -225,8 +219,6 @@ describe "Playlist" do
   context "A directory of directories of files", :time_sensitive do
     Given(:options) {
       {
-        "--help"        =>  false,
-        "--output"      =>  nil,
         "--title"       =>  nil,
         "--creator"     =>  nil,
         "--date"        =>  nil,
@@ -238,7 +230,6 @@ describe "Playlist" do
         "--no-tracknum" =>  false,
         "--max-tracks"  =>  nil,
         "PATHS"=>["spec/support/fixtures/albums"],
-        "--version"     =>  false
       }
     }
     Given(:playlist) { Spfy::Playlist.new( options ) }
@@ -254,8 +245,6 @@ describe "Playlist" do
   context "Multiple locations", :time_sensitive do
     Given(:options) {
       {
-        "--help"        =>  false,
-        "--output"      =>  nil,
         "--title"       =>  nil,
         "--creator"     =>  nil,
         "--date"        =>  nil,
@@ -267,7 +256,6 @@ describe "Playlist" do
         "--no-tracknum" =>  false,
         "--max-tracks"  =>  nil,
         "PATHS"=>["spec/support/fixtures/albums/mp3", "spec/support/fixtures/albums/mp4"],
-        "--version"     =>  false
       }
     }
     Given(:playlist) { Spfy::Playlist.new( options ) }
@@ -278,5 +266,66 @@ describe "Playlist" do
     }
     When(:xml) { playlist.to_xml }
     Then { cmd(xml.chomp) == cmd(xml_comparator.chomp) }
+  end
+
+  context "Given a max number of tracks" do
+    context "When the no. of tracks found is greater" do
+      Given(:options) {
+        {
+          "--title"       =>  nil,
+          "--creator"     =>  nil,
+          "--date"        =>  nil,
+          "--annotation"  =>  nil,
+          "--no-location" =>  false,
+          "--no-title"    =>  false,
+          "--no-artist"   =>  false,
+          "--no-album"    =>  false,
+          "--no-tracknum" =>  false,
+          "--max-tracks"  =>  10,
+          "PATHS"=>["spec/support/fixtures/albums"],
+        }
+      }
+      Given(:playlist) { Spfy::Playlist.new( options ) }
+      When(:xml) { playlist.to_xml }
+      Then {
+        options["--max-tracks"].to_i ==
+          cmd(xml.chomp).split("\n")
+                      .select{|line|
+                        line =~ /\<track\>/
+                      }.size
+      }
+    end
+    context "When the no. of tracks found is less", :time_sensitive do
+      Given(:options) {
+        {
+          "--title"       =>  nil,
+          "--creator"     =>  nil,
+          "--date"        =>  nil,
+          "--annotation"  =>  nil,
+          "--no-location" =>  false,
+          "--no-title"    =>  false,
+          "--no-artist"   =>  false,
+          "--no-album"    =>  false,
+          "--no-tracknum" =>  false,
+          "--max-tracks"  =>  10,
+          "PATHS"=>["spec/support/fixtures/albums/mp3"],
+        }
+      }
+      Given(:playlist) { Spfy::Playlist.new( options ) }
+      Given(:xml_comparator) {
+        Fixtures.join("mp3.playlist.xml").read
+          .gsub( /ALBUMS/, URI.join( "file:///", URI.escape( Albums.to_path)).to_s )
+          .sub( /USER/, ENV["USER"] )
+      }
+      When(:xml) { playlist.to_xml }
+      Then { cmd(xml.chomp) == cmd(xml_comparator.chomp) }
+      Then {
+        options["--max-tracks"].to_i >
+          cmd(xml.chomp).split("\n")
+                      .select{|line|
+                        line =~ /\<track\>/
+                      }.size
+      }
+    end
   end
 end

@@ -197,7 +197,7 @@ module Spfy
       end
       @creator = options.delete("--creator") || ENV["USER"]
       @annotation = options.delete("--annotation") || "Created with Spfy.rb"
-      #@max_tracks = @option["--max-tracks"]
+      @max_tracks = options["--max-tracks"] && options["--max-tracks"].to_i
     end
 
 
@@ -215,10 +215,9 @@ module Spfy
     # Render the playlist and any tracks.
     def to_xml
       return "" if @paths.empty?
-      #catch :MaxTracksReached {
-      @template.render(self) do
-        mapped = []
-        @paths.each { |path|
+      mapped = []
+      catch(:MaxTracksReached){
+        @paths.each do |path|
           if path.directory?
             path.find do |pn|
               if pn.directory?
@@ -227,15 +226,19 @@ module Spfy
                   next
               else
                 mapped << Spfy::Track.new(pn, options: @options)
+                throw :MaxTracksReached if @max_tracks and mapped.size >= @max_tracks
               end
             end
           else
             mapped << Spfy::Track.new(path, options: @options)
+            throw :MaxTracksReached if @max_tracks and mapped.size >= @max_tracks
           end
-        }
+        end
+      }
+      # TODO fail when there are no tracks found
+      @template.render(self) do
         mapped.map(&:to_xml).join("\n")
       end
-      #}
     end
 
   end
