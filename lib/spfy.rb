@@ -10,34 +10,106 @@ module Spfy
   # Locations of the ERB templates
   TEMPLATES = Pathname(__dir__).join("templates")
 
+
   # Produces the track entity
   # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.14.1.1
   class Track
+
+    XSPF_TAGS = [:location, :album, :artist, :comment, :genre, :title, :trackNum, :year].freeze
+    XSPF_TO_TAGLIB = {
+      :album    => :album,
+      :artist   => :artist,
+      :comment  => :comment,
+      :genre    => :genre,
+      :title    => :title,
+      :trackNum => :track,
+      :year     => :year,
+    }.freeze
+
+
+    # param [String,Pathname] path The location of the track.
+    # param [Hash] options
     def initialize path, options: {}
       @path = Pathname(path).expand_path
       @template = Tilt::ERBTemplate.new(TEMPLATES.join("track.xml.erb"))
       @processed = false
-      @available_tags = [:location, :album, :artist, :comment, :genre, :title, :trackNum, :year]
+      @options = options.dup
+      parse @options
+      @available_tags = XSPF_TAGS - @noes
+      @data_klass = Struct.new *@available_tags
+      @data = @data_klass.new
+      # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.5
+      if @location.nil? and @available_tags.include?(:location)
+        path = @path.absolute? ? @path : @path.realpath
+        @location = URI.join('file:///', URI.escape(path.to_path) )
+        @data.location = @location
+      end
+
       process
+    end
+
+
+    # If there's a way to do dynamic delegation using Forwadable
+    # I don't know what it is. Hence this.
+    def method_missing(name, *args)
+      if @available_tags.include? name.to_sym
+        instance_eval <<-RUBY
+          def #{name}
+            @data.send :#{name}
+          end
+        RUBY
+        send name.to_sym
+      else
+        super
+      end
+    end
+
+
+    # Be a good person
+    def respond_to?(name, include_private = false)
+      if @available_tags.include? name.to_sym
+        true
+      else
+        super
+      end
+    end
+
+
+    # Parse the options, mainly to find which ones were --no-
+    def parse options
+      @noes = options.each_with_object([]){|(k,v), obj|
+                if k =~ /^\-\-no\-/ and v
+                  obj << k.match(/^\-\-no\-(?<name>\w+)$/)[:name].to_sym
+                end
+                obj
+              }
     end
 
     # The file path
     attr_reader :path
+    attr_reader :available_tags
+    attr_reader :data
 
 
-    # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.5
-    def location
-      if @location.nil?
-        path = @path.absolute? ? @path : @path.realpath
-        @location = URI.join('file:///', URI.escape(path.to_path) )
+    # @private
+    # Process the options into a track entity.
+    # Calls TagLib
+    def process refresh=false
+      if refresh or @processed == false
+        TagLib::FileRef.open(@path.to_path) do |fileref|
+          tags = fileref.tag
+
+          unless tags.nil? # skip files with no tags
+            XSPF_TO_TAGLIB.select{|k,v| available_tags.include? k }
+            .each do |xspf,tagl|
+              @data.send "#{xspf}=", tags.send(tagl)
+            end
+          end
+        end
+
+        @processed = true
       end
-      @location
-#     rescue Errno::ENOENT => e
-      # Log somewhere
     end
-
-    # The targeted sub-elements
-    attr_accessor :album, :artist, :comment, :genre, :title, :trackNum, :year
 
 
     # For a block {|name,tag| ... }
@@ -57,29 +129,6 @@ module Spfy
     end
 
 
-    # @private
-    # Process the options into a track entity.
-    # Calls TagLib
-    def process refresh=false
-      if refresh or @processed == false
-        TagLib::FileRef.open(@path.to_path) do |fileref|  
-          tags = fileref.tag
-  
-          next if tags.nil? # skip files with no tags
-
-          @album    = tags.album
-          @artist   = tags.artist
-          @comment  = tags.comment
-          @genre    = tags.genre
-          @title    = tags.title
-          @trackNum = tags.track
-          @year     = tags.year
-        end
-        @processed = true
-      end
-    end
-
-
     # The renderer
     # @return [String]
     def to_xml
@@ -95,7 +144,7 @@ module Spfy
 
     def initialize options
       set_traps_for_signals
-      @options = options
+      @options = options.dup
       @files = []
       @template = Tilt::ERBTemplate.new(TEMPLATES.join("playlist.xml.erb"))
       parse @options
@@ -135,10 +184,10 @@ module Spfy
     #   "--version"     =>  false
     # }
     def parse options
-      @paths = (options.fetch "PATHS", []).map{|path| Pathname(path.sub /^~/, ENV["HOME"]) }
+      @paths = (options.delete("PATHS") || []).map{|path| Pathname(path.sub /^~/, ENV["HOME"]) }
       return if @paths.empty?
       @title = if options["--title"]
-        options["--title"]
+        options.delete("--title")
       else
         if @paths.first.directory?
           @paths.first.basename
@@ -146,9 +195,8 @@ module Spfy
           @paths.first.parent.basename
         end
       end
-      @creator = options["--creator"] || ENV["USER"]
-      @annotation = options["--annotation"] || "Created with Spfy.rb"
-      @noes = options.select{|k,v| k =~ /^\-\-no\-/ and v }
+      @creator = options.delete("--creator") || ENV["USER"]
+      @annotation = options.delete("--annotation") || "Created with Spfy.rb"
       #@max_tracks = @option["--max-tracks"]
     end
 
@@ -178,11 +226,11 @@ module Spfy
                   Find.prune :
                   next
               else
-                mapped << Spfy::Track.new(pn)
+                mapped << Spfy::Track.new(pn, options: @options)
               end
             end
           else
-            mapped << Spfy::Track.new(path)
+            mapped << Spfy::Track.new(path, options: @options)
           end
         }
         mapped.map(&:to_xml).join("\n")
