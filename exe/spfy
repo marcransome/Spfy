@@ -42,7 +42,7 @@ playlist = Spfy::Playlist.new options
 
 blk = ->(f){ f.puts playlist.to_xml }
 
-if options["--output"]
+if output
   File.open(output, "w", &blk)
 else
   blk.call(Kernel)
