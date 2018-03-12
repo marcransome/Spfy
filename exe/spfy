@@ -22,7 +22,7 @@ Options:
   --no-title                    Suppress track title in output
   --no-artist                   Suppress artist name in output
   --no-album                    Suppress album name in output
-  --no-tracknum                 Suppress track number in output
+  --no-trackNum                 Suppress track number in output - CASE SENSITIVE!
   --max-tracks NUM              Limit the output to NUM tracks
 DOCOPT
 
@@ -32,12 +32,18 @@ rescue Docopt::Exit => e
   puts e.message
 end
 
+output = options.delete "--output"
+
+# Remove extraneous
+options.delete "--help"
+options.delete "--version"
+
 playlist = Spfy::Playlist.new options
 
 blk = ->(f){ f.puts playlist.to_xml }
 
 if options["--output"]
-  File.open(options["--output"], "w", &blk)
+  File.open(output, "w", &blk)
 else
   blk.call(Kernel)
 end
