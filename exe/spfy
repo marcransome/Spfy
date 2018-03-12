@@ -30,6 +30,7 @@ begin
   options = Docopt::docopt(doc, version: Spfy::VERSION)
 rescue Docopt::Exit => e
   puts e.message
+  exit 0
 end
 
 output = options.delete "--output"
