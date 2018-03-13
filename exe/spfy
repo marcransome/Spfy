@@ -24,6 +24,10 @@ Options:
   --no-album                    Suppress album name in output
   --no-trackNum                 Suppress track number in output - CASE SENSITIVE!
   --max-tracks NUM              Limit the output to NUM tracks
+  --use-tidy                    Run the tidy command to prettify the output. 
+                                Uses `/usr/bin/command -v tidy` to find tidy and
+                                 `tidy -q -i -xml` to filter through.
+  --force                       Allow the overwriting of a file.
 DOCOPT
 
 begin
@@ -38,13 +42,41 @@ output = options.delete "--output"
 # Remove extraneous
 options.delete "--help"
 options.delete "--version"
+use_tidy = options.delete "--use-tidy"
+force_ok = options.delete "--force"
+WARNING_RED="tput setaf 1"
+BACK_TO_NORMAL="tput sgr0"
 
 playlist = Spfy::Playlist.new options
 
-blk = ->(f){ f.puts playlist.to_xml }
+COMMAND = "/usr/bin/command"
+DEFAULT_TIDY_FINDER="#{COMMAND} -v tidy"
+
+def filter xml, use_tidy=false
+  if use_tidy
+    require 'open3'
+    path = Pathname(`#{DEFAULT_TIDY_FINDER}`.chomp)
+    if path.exist?
+      stdout, _= Open3.capture2(path.to_path,"-q", "-i", "-xml", stdin_data: xml)
+      stdout
+    else
+      warn `#{WARNING_RED}` + "tidy not found at #{path.to_path}" + `#{BACK_TO_NORMAL}` + "\nRunning without tidying…\n\n"
+      xml
+    end
+  else
+    xml
+  end
+end
+
+blk = ->(f){ f.puts filter(playlist.to_xml, use_tidy)  }
 
 if output
-  File.open(output, "w", &blk)
+  path = Pathname(output)
+  if path.exist? and not force_ok
+    warn `#{WARNING_RED}` + "#{path.to_path} exists. Use the --force option to overwrite" + `#{BACK_TO_NORMAL}`
+  else
+    File.open(path, "w", &blk)
+  end
 else
   blk.call(Kernel)
 end
