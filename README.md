@@ -8,13 +8,13 @@ A working Ruby installation (version 2.0 or greater) is required for Spfy to wor
 
 [TagLib](http://developer.kde.org/~wheeler/taglib.html) is also required.  Follow the steps below (taken from the [taglib-ruby installation guide](http://robinst.github.com/taglib-ruby/)) to install the necessary files for your respective system type:
 
-| System:       |  Command:                          |
-|---------------|------------------------------------|
-| Debian/Ubuntu | `sudo apt-get install libtag1-dev` |
-| Fedora/RHEL   | `sudo yum install taglib-devel`    |
-| Brew          | `brew install taglib`              |
-| MacPorts      | `sudo port install taglib`         |
-| Pkgsrc        | `(sudo) pkgin install taglib`      |
+| System:       |  Command:                          |  
+|---------------|------------------------------------|  
+| Debian/Ubuntu | `sudo apt-get install libtag1-dev` |  
+| Fedora/RHEL   | `sudo yum install taglib-devel`    |  
+| Brew          | `brew install taglib`              |  
+| MacPorts      | `sudo port install taglib`         |  
+| Pkgsrc        | `(sudo) pkgin install taglib`      |  
 
 ### Installation
 With the prerequisites above taken care of Spfy can be installed with the following command:
@@ -51,7 +51,7 @@ For example:
 </playlist>
 ```
 
-Spfy supports multiple directory paths (e.g. `spfy /dir1 /dir2`) and traverses each directory recursively by default.  Unsupported files and empty directories in a directory tree are silently ignored and will not impact Spfy's output. It will even take a single file as a target, or directories with sub-directories that hold files (no max depth has been set on the recursion so don't start to far up the directory tree;)
+Spfy supports multiple directory paths (e.g. `spfy /dir1 /dir2`) and traverses each directory recursively by default.  Unsupported files and empty directories in a directory tree are silently ignored and will not impact Spfy's output. It will even take a single file as a target, or directories with sub-directories that hold files (no max depth has been set on the recursion so don't start too far up the directory tree;)
 
 Command-line arguments allow you to control which elements Spfy outputs:
 
