@@ -12,6 +12,8 @@ group :development do
   gem "pry-state"
   gem "rb-readline"
   gem "awesome_print"
+  gem "yard"
+  gem "yardstick"
 end
 
 
