@@ -1,14 +1,18 @@
 #!/usr/bin/env ruby
 
 require 'spfy'
+require 'spfy/version'
 require 'docopt'
+require 'pathname'
+
+EXE = Pathname(__FILE__).basename
 
 doc = <<DOCOPT
 Grab and output XSPF data for media files. See http://xspf.org/ for the data definition.
 
 Usage:
-  #{__FILE__} [options] PATHS...
-  #{__FILE__} --version
+  #{EXE} [options] PATHS...
+  #{EXE} --version
 
 Options:
   -h --help                     Show this help message and exit
