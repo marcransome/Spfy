@@ -328,4 +328,24 @@ describe "Playlist" do
       }
     end
   end
+
+  context "Given paths with no media files" do
+    Given(:options) {
+      {
+        "--title"       =>  nil,
+        "--creator"     =>  nil,
+        "--date"        =>  nil,
+        "--annotation"  =>  nil,
+        "--no-location" =>  false,
+        "--no-title"    =>  false,
+        "--no-artist"   =>  false,
+        "--no-album"    =>  false,
+        "--no-tracknum" =>  false,
+        "--max-tracks"  =>  10,
+        "PATHS"=>["spec/support/fixtures/albums/empty"],
+      }
+    }
+    Given(:playlist) { Spfy::Playlist.new( options ) }
+    Then { expect { playlist.to_xml }.to raise_error(Spfy::Error) }
+  end
 end
