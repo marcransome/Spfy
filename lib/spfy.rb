@@ -14,7 +14,6 @@ module Spfy
   # Locations of the ERB templates
   TEMPLATES = Pathname(__dir__).join("templates")
 
-
   # Produces the track entity
   # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.14.1.1
   class Track
@@ -132,7 +131,7 @@ module Spfy
           unless tags.nil? # skip files with no tags
             XSPF_TO_TAGLIB.select{|k,v| available_tags.include? k }
             .each do |xspf,tagl|
-              @data.send "#{xspf}=", tags.send(tagl)
+              @data.send "#{xspf}=", tags.respond_to?(:strip) ? tags.send(tagl).strip : tags.send(tagl)
             end
           end
         end
