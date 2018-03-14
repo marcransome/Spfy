@@ -16,3 +16,4 @@ scratch/
 .yardoc/
 spec/support/fixtures/albums
 .rspec
+*.gem
