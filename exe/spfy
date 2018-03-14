@@ -74,6 +74,7 @@ end
 
 blk = ->(f){ f.puts filter(playlist.to_xml, use_tidy)  }
 
+begin
 if output
   path = Pathname(output)
   if path.exist? and not force_ok
@@ -83,4 +84,7 @@ if output
   end
 else
   blk.call(Kernel)
+end
+rescue => e
+  warn e.message
 end
