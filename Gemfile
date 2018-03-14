@@ -21,7 +21,6 @@ group :test do
   gem "rspec"
   gem "rspec-its"
   gem "simplecov"
-  gem "rspec"
   gem "rspec-given"
   gem "timecop",     ">=0.9.1"
 end
