@@ -2,7 +2,7 @@ require "taglib"
 require 'tilt'
 require 'pathname'
 require 'time'
-require 'uri'
+require 'addressable/uri'
 
 # Create XSPF playlist files
 module Spfy
@@ -51,7 +51,7 @@ module Spfy
       # @see http://xspf.org/xspf-v1.html#rfc.section.4.1.1.2.5
       if @location.nil? and @available_tags.include?(:location)
         path = @path.absolute? ? @path : @path.realpath
-        @location = URI.join('file:///', URI.escape(path.to_path) )
+        @location = Addressable::URI.join('file:///', Addressable::URI.escape(path.to_path) )
         @data.location = @location
       end
 

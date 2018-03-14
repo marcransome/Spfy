@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'taglib-ruby', '>= 0.5.0'
   gem.add_runtime_dependency "docopt",      ">= 0.6.1"
   gem.add_runtime_dependency "tilt",        ">=2.0.8"
+  gem.add_runtime_dependency "addressable", ">=2.5.2"
   gem.homepage        = 'https://github.com/marcransome/Spfy'
   gem.license         = 'GPL-3.0'
 end

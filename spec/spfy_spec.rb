@@ -111,7 +111,7 @@ describe "Track" do
     # Mung the path in the file so it works on any machine
     Given(:location) { 
       track = Albums.join("mp4/mp4.m4a").to_path
-      URI.join( "file:///", URI.escape( track ))
+      Addressable::URI.join( "file:///", Addressable::URI.escape( track ))
     }
     Given(:xml_comparator) {
       Fixtures.join("mp4.m4a.xml")
@@ -178,7 +178,7 @@ describe "Playlist" do
     Given(:xml_comparator) {
       track = Albums.join("mp4/mp4.m4a").to_path
       Fixtures.join("mp4.m4a.playlist.xml").read
-        .sub( /FIXTURE/, URI.join( "file:///", URI.escape( track )).to_s  )
+        .sub( /FIXTURE/, Addressable::URI.join( "file:///", Addressable::URI.escape( track )).to_s  )
         .sub( /USER/, ENV["USER"] )
     }
     When(:xml) { playlist.to_xml }
@@ -209,7 +209,7 @@ describe "Playlist" do
     Given(:playlist) { Spfy::Playlist.new( options ) }
     Given(:xml_comparator) {
       Fixtures.join("mp3.playlist.xml").read
-        .gsub( /ALBUMS/, URI.join( "file:///", URI.escape( Albums.to_path)).to_s )
+        .gsub( /ALBUMS/, Addressable::URI.join( "file:///", Addressable::URI.escape( Albums.to_path)).to_s )
         .sub( /USER/, ENV["USER"] )
     }
     When(:xml) { playlist.to_xml }
@@ -235,7 +235,7 @@ describe "Playlist" do
     Given(:playlist) { Spfy::Playlist.new( options ) }
     Given(:xml_comparator) {
       Fixtures.join("all-albums.playlist.xml").read
-        .gsub( /ALBUMS/, URI.join( "file:///", URI.escape( Albums.to_path)).to_s )
+        .gsub( /ALBUMS/, Addressable::URI.join( "file:///", Addressable::URI.escape( Albums.to_path)).to_s )
         .sub( /USER/, ENV["USER"] )
     }
     When(:xml) { playlist.to_xml }
@@ -261,7 +261,7 @@ describe "Playlist" do
     Given(:playlist) { Spfy::Playlist.new( options ) }
     Given(:xml_comparator) {
       Fixtures.join("mp3-and-mp4.playlist.xml").read
-        .gsub( /ALBUMS/, URI.join( "file:///", URI.escape( Albums.to_path)).to_s  )
+        .gsub( /ALBUMS/, Addressable::URI.join( "file:///", Addressable::URI.escape( Albums.to_path)).to_s  )
         .sub( /USER/, ENV["USER"] )
     }
     When(:xml) { playlist.to_xml }
@@ -314,7 +314,7 @@ describe "Playlist" do
       Given(:playlist) { Spfy::Playlist.new( options ) }
       Given(:xml_comparator) {
         Fixtures.join("mp3.playlist.xml").read
-          .gsub( /ALBUMS/, URI.join( "file:///", URI.escape( Albums.to_path)).to_s )
+          .gsub( /ALBUMS/, Addressable::URI.join( "file:///", Addressable::URI.escape( Albums.to_path)).to_s )
           .sub( /USER/, ENV["USER"] )
       }
       When(:xml) { playlist.to_xml }
