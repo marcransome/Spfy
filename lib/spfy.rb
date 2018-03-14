@@ -7,6 +7,10 @@ require 'uri'
 # Create XSPF playlist files
 module Spfy
 
+  # For tagging all exceptions that come through this library.
+  module Error; end
+
+
   # Locations of the ERB templates
   TEMPLATES = Pathname(__dir__).join("templates")
 
@@ -280,6 +284,10 @@ module Spfy
       mapped = []
       catch(:MaxTracksReached){
         @paths.each do |path|
+          if !path.exist?
+            warn "#{path.to_path} does not exist"
+            next
+          end
           if path.directory?
             path.find do |pn|
               if pn.directory?
@@ -297,11 +305,19 @@ module Spfy
           end
         end
       }
-      # TODO fail when there are no tracks found
+      if mapped.size.zero?
+        fail RuntimeError, "No tracks found in #{@paths.map(&:to_path).join(' or ')}"
+      end
       @template.render(self) do
         mapped.map(&:to_xml).join("\n")
       end
-    end
 
+    rescue Spfy::Error
+      raise
+    rescue => error
+      # Tag any exceptions coming through this library
+      error.extend(Spfy::Error)
+      raise
+    end
   end
 end
