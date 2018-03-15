@@ -24,7 +24,7 @@ Options:
   -a NOTE --annotation=NOTE     Playlist annotation, default: "Created with Spfy.rb"
   --no-location                 Suppress file location output
   --no-title                    Suppress track title in output
-  --no-artist                   Suppress artist name in output
+  --no-artist                   Suppress artist/creator name in track output
   --no-album                    Suppress album name in output
   --no-trackNum                 Suppress track number in output - CASE SENSITIVE!
   --max-tracks NUM              Limit the output to NUM tracks

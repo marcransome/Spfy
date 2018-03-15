@@ -19,19 +19,26 @@ module Spfy
   class Track
 
     # The XSPF tags being targeted
-    XSPF_TAGS = [:location, :album, :artist, :comment, :genre, :title, :trackNum, :year].freeze
+    XSPF_TAGS = [:location, :album, :creator, :annotation, :title, :trackNum].freeze
 
     # The translation of XSPF tags and Taglib tags
     XSPF_TO_TAGLIB = {
-      :album    => :album,
-      :artist   => :artist,
-      :comment  => :comment,
-      :genre    => :genre,
-      :title    => :title,
-      :trackNum => :track,
-      :year     => :year,
+      :album      => :album,
+      :creator    => :artist,
+      :annotation => :comment,
+      :title      => :title,
+      :trackNum   => :track,
     }.freeze
 
+    # Mainly for translating options into XSPF for noes
+    TAGLIB_TO_XSPF = {
+      :track    =>  :trackNum,
+      :title    =>  :title,
+      :comment  =>  :annotation,
+      :artist   =>  :creator,
+      :album    =>  :album,
+      :location =>  :location
+    }.freeze
 
     # @param [String,Pathname] path The location of the track.
     # @param [Hash] options
@@ -95,7 +102,8 @@ module Spfy
     def parse options
       @noes = options.each_with_object([]){|(k,v), obj|
                 if k =~ /^\-\-no\-/ and v
-                  obj << k.match(/^\-\-no\-(?<name>\w+)$/)[:name].to_sym
+                  taglib_name = k.match(/^\-\-no\-(?<name>\w+)$/)[:name]
+                  obj << TAGLIB_TO_XSPF[taglib_name.to_sym]
                 end
                 obj
               }

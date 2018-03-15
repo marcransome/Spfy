@@ -33,72 +33,58 @@ describe "Track" do
         Then { track.available_tags.sort == (Spfy::Track::XSPF_TAGS - [:location]).sort }
         And { track.respond_to?(:location) == false }
         And { track.respond_to? :album }
-        And { track.respond_to? :artist }
-        And { track.respond_to? :comment }
-        And { track.respond_to? :genre }
+        And { track.respond_to? :creator }
+        And { track.respond_to? :annotation }
         And { track.respond_to? :title }
         And { track.respond_to? :trackNum }
-        And { track.respond_to? :year }
         And { track.respond_to? :data }
 
         Then { track.data.respond_to?(:location) == false }
         And { track.data.respond_to? :album }
-        And { track.data.respond_to? :artist }
-        And { track.data.respond_to? :comment }
-        And { track.data.respond_to? :genre }
+        And { track.data.respond_to? :creator }
+        And { track.data.respond_to? :annotation }
         And { track.data.respond_to? :title }
         And { track.data.respond_to? :trackNum }
-        And { track.data.respond_to? :year }
 
         Then { track.album == "Album" }
-        And { track.artist == "Artist" }
-        And { track.comment == "Comment" }
-        And { track.genre == "Pop" }
+        And { track.creator == "Artist" }
+        And { track.annotation == "Comment" }
         And { track.title == "Title" }
         And { track.trackNum == 7 }
-        And { track.year == 2011 }
       end
     end
-    context "No year or genre" do
+    context "No title or artist" do
       Given(:options) {
         {
           "--no-location" =>  false,
-          "--no-title"    =>  false,
-          "--no-artist"   =>  false,
+          "--no-title"    =>  true,
+          "--no-artist"   =>  true,
           "--no-album"    =>  false,
           "--no-tracknum" =>  false,
-          "--no-year"     =>  true,
-          "--no-genre"    =>  true,
         }
       }
       Given(:track) { Spfy::Track.new path, options: options }
       context "the unit" do
-        Then { track.instance_variable_get(:@noes).sort == [:genre,:year].sort }
+        Then { track.instance_variable_get(:@noes).sort == [:creator,:title].sort }
 
-        Then { track.available_tags.sort == (Spfy::Track::XSPF_TAGS - [:genre,:year]).sort }
+        Then { track.available_tags.sort == (Spfy::Track::XSPF_TAGS - [:creator,:title]).sort }
         And { track.respond_to?(:location) }
         And { track.respond_to? :album }
-        And { track.respond_to? :artist }
-        And { track.respond_to? :comment }
-        And { track.respond_to?( :genre ) == false }
-        And { track.respond_to? :title }
+        And { track.respond_to?( :creator ) == false }
+        And { track.respond_to? :annotation }
+        And { track.respond_to?( :title ) == false }
         And { track.respond_to? :trackNum }
-        And { track.respond_to?( :year ) == false}
         And { track.respond_to? :data }
 
         Then { track.data.respond_to? :location }
         And { track.data.respond_to? :album }
-        And { track.data.respond_to? :artist }
-        And { track.data.respond_to? :comment }
-        And { track.data.respond_to?( :genre ) == false }
-        And { track.data.respond_to? :title }
+        And { track.data.respond_to?( :creator ) == false }
+        And { track.data.respond_to? :annotation }
+        And { track.data.respond_to?( :title ) == false }
         And { track.data.respond_to? :trackNum }
-        And { track.data.respond_to?( :year ) == false}
 
         Then { track.album == "Album" }
-        And { track.artist == "Artist" }
-        And { track.comment == "Comment" }
-        And { track.title == "Title" }
+        And { track.annotation == "Comment" }
         And { track.trackNum == 7 }
       end
     end
@@ -122,31 +108,25 @@ describe "Track" do
       Then { track.available_tags == Spfy::Track::XSPF_TAGS }
       And { track.respond_to? :location }
       And { track.respond_to? :album }
-      And { track.respond_to? :artist }
-      And { track.respond_to? :comment }
-      And { track.respond_to? :genre }
+      And { track.respond_to? :creator }
+      And { track.respond_to? :annotation }
       And { track.respond_to? :title }
       And { track.respond_to? :trackNum }
-      And { track.respond_to? :year }
       And { track.respond_to? :data }
 
       Then { track.data.respond_to? :location }
       And { track.data.respond_to? :album }
-      And { track.data.respond_to? :artist }
-      And { track.data.respond_to? :comment }
-      And { track.data.respond_to? :genre }
+      And { track.data.respond_to? :creator }
+      And { track.data.respond_to? :annotation }
       And { track.data.respond_to? :title }
       And { track.data.respond_to? :trackNum }
-      And { track.data.respond_to? :year }
 
       Then { track.location == location }
       And { track.album == "Album" }
-      And { track.artist == "Artist" }
-      And { track.comment == "Comment" }
-      And { track.genre == "Pop" }
+      And { track.creator == "Artist" }
+      And { track.annotation == "Comment" }
       And { track.title == "Title" }
       And { track.trackNum == 7 }
-      And { track.year == 2011 }
     end
 
 

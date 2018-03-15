@@ -8,58 +8,47 @@
     <track>
       <location>ALBUMS/mp3/crash.mp3</location>
       <trackNum>0</trackNum>
-      <year>0</year>
     </track>
     <track>
       <location>ALBUMS/mp3/id3v1.mp3</location>
       <album>Album</album>
-      <artist>Artist</artist>
-      <comment>Comment</comment>
-      <genre>Pop</genre>
+      <creator>Artist</creator>
+      <annotation>Comment</annotation>
       <title>Title</title>
       <trackNum>7</trackNum>
-      <year>2011</year>
     </track>
     <track>
       <location>ALBUMS/mp3/relative-volume.mp3</location>
       <trackNum>0</trackNum>
-      <year>0</year>
     </track>
     <track>
       <location>ALBUMS/mp3/sample.mp3</location>
       <album>Dummy Album</album>
-      <artist>Dummy Artist</artist>
-      <comment>Dummy Comment</comment>
-      <genre>Pop</genre>
+      <creator>Dummy Artist</creator>
+      <annotation>Dummy Comment</annotation>
       <title>Dummy Title</title>
       <trackNum>1</trackNum>
-      <year>2000</year>
     </track>
     <track>
       <location>ALBUMS/mp3/unicode.mp3</location>
       <title>&#228;&#189;&#160;&#229;&#165;&#189;</title>
       <trackNum>0</trackNum>
-      <year>0</year>
     </track>
     <track>
       <location>ALBUMS/mp4/aiff-sample.aiff</location>
       <album>AIFF Dummy Album Title</album>
-      <artist>AIFF Dummy Artist Name</artist>
-      <comment>AIFF Dummy Comment</comment>
-      <genre>Jazz</genre>
+      <creator>AIFF Dummy Artist Name</creator>
+      <annotation>AIFF Dummy Comment</annotation>
       <title>AIFF Dummy Track Title - ID3v2.4</title>
       <trackNum>3</trackNum>
-      <year>2014</year>
     </track>
     <track>
       <location>ALBUMS/mp4/mp4.m4a</location>
       <album>Album</album>
-      <artist>Artist</artist>
-      <comment>Comment</comment>
-      <genre>Pop</genre>
+      <creator>Artist</creator>
+      <annotation>Comment</annotation>
       <title>Title</title>
       <trackNum>7</trackNum>
-      <year>2011</year>
     </track>
   </trackList>
 </playlist>
