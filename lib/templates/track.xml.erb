@@ -1,0 +1,3 @@
+<track>
+<% each_tag do |name,tag| %><%= "<#{name}>#{tag.to_s.encode(:xml => :text)}</#{name}>\n" %>
+<% end %></track>
