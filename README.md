@@ -1,4 +1,4 @@
-## Spfy ("spiffy") [![Code Climate](http://img.shields.io/codeclimate/github/marcransome/Spfy.svg)](https://codeclimate.com/github/marcransome/Spfy)
+## Spfy ("spiffy")
 
 ### Overview
 **Spfy** is a command-line tool for generating [XSPF](http://xspf.org/) playlists from metadata stored in several popular audio formats and is developed entirely in [Ruby](http://www.ruby-lang.org/).  It takes one or more local directory paths as input, extracts metadata tags from any audio files that it encounters, and generates a valid XSPF playlist.
